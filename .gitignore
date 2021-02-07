@@ -1,0 +1,9 @@
+# *.dSYM
+# *.plist
+# *.out
+*
+!.gitignore
+!*.c
+
+
+!*/
