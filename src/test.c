@@ -27,7 +27,15 @@ void test__rTreeTraverseToLeaf() {
     Node leftNode = {NULL,0,0,&bboxLeftNode,NULL};
 
     BBox bboxRightNode = {1.5,1.5,2,2};
-    Node rightNode = {NULL,0,0,&bboxRightNode,NULL};
+    BBox rightTopBbox = {1,1.5,1.5,3};
+    BBox rightBottomBbox = {1,1,1.5,1.5};
+
+    Node rightTopLeaf = {NULL,5,0,&rightTopBbox,NULL};
+    Node rightBottomLeaf = {NULL,5,0,&rightBottomBbox,NULL};
+
+    Node rightNodeChildren[] = {rightTopLeaf,rightBottomLeaf};
+    Node rightNode = {NULL,0,2,&bboxRightNode,&rightNodeChildren};
+
     Node nextNodes[] = {leftNode,rightNode};
     Node rootNode = {NULL,10,2,NULL,&nextNodes};
     RTree rTree = {1,5,&rootNode,NULL};
@@ -35,7 +43,7 @@ void test__rTreeTraverseToLeaf() {
     Point myPoint = {1.25,1.25};
     Node * foundNode = _rTreeTraverseToLeaf(&rTree, &myPoint);
     
-    fAssertEqual(bboxLeftNode.maxX,foundNode->bbox->maxX,floatTol);
+    fAssertEqual(rightBottomBbox.maxX,foundNode->bbox->maxX,floatTol);
 }
 
 void testSuite() {
