@@ -32,7 +32,7 @@ Node * _rTreeTraverseToLeaf(RTree * rTree, Point * point);
 /**
  * 
  * */
-void _rTreeInsertNode(RTree * rTree, Node * newNode);
+Node * _rTreeInsertPoint(RTree * rTree, Point * newPoint);
 
 
 /**

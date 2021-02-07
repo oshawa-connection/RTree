@@ -22,5 +22,5 @@ int main(int argc, char **argv) {
 
     
 
-    // printf("Hello world\n");
+    printf("Hello world my name is james\n");
 }

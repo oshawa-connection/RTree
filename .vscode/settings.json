@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "rtree.h": "c",
+        "testutils.h": "c"
+    }
+}

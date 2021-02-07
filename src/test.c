@@ -4,11 +4,15 @@
 #include "../headers/RTree.h"
 #include <math.h>
 
-
-
 const float floatTol = 0.001;
 
-void fAssertEqual(float expected, float actual, float tolerance) {
+static void iAssertEqual(int expected, int actual) {
+    if (!(expected == actual)) {
+        printf("Assertation failed. Expected %d to equal %d.",expected, actual);
+    }
+}
+
+static void fAssertEqual(float expected, float actual, float tolerance) {
     float difference = fabs(expected - actual);
     
     if (!(difference < tolerance)) {
@@ -16,7 +20,7 @@ void fAssertEqual(float expected, float actual, float tolerance) {
     }
 }
 
-void AssertTrue(bool value) {
+static void AssertTrue(bool value) {
     if (!value) {
         printf("Assertation failed. Expected true but got false");
     }
@@ -46,10 +50,36 @@ void test__rTreeTraverseToLeaf() {
     fAssertEqual(rightBottomBbox.maxX,foundNode->bbox->maxX,floatTol);
 }
 
+void test__rTreeInsertPoint() {
+
+    BBox bboxLeftNode = {1,1,1.5,1.5};
+    Node leftNode = {NULL,0,0,&bboxLeftNode,NULL};
+
+    BBox bboxRightNode = {1.5,1.5,2,2};
+    BBox rightTopBbox = {1,1.5,1.5,3};
+    BBox rightBottomBbox = {1,1,1.5,1.5};
+    
+    Node rightTopLeaf = {NULL,5,0,&rightTopBbox,NULL};
+    Point rightBottomPoints[3] = {{1.1,1.1},{1.1,1.1},{1.1,1.1}};
+    Node rightBottomLeaf = {&rightBottomPoints,3,0,&rightBottomBbox,NULL};
+
+    Node rightNodeChildren[] = {rightTopLeaf,rightBottomLeaf};
+    Node rightNode = {NULL,0,2,&bboxRightNode,&rightNodeChildren};
+
+    Node nextNodes[] = {leftNode,rightNode};
+    Node rootNode = {NULL,10,2,NULL,&nextNodes};
+    RTree rTree = {1,5,&rootNode,NULL};
+
+
+    Point myPoint = {1.25,1.25};
+    
+    Node * editedLeaf = _rTreeInsertPoint(&rTree,&myPoint);
+    
+    iAssertEqual(rightBottomLeaf.nPoints +1,editedLeaf->nPoints);
+}
+
 void testSuite() {
 
-    
-    
     Node rootNode = {0,NULL,NULL};
     if (!_nodeIsALeaf(&rootNode)) {
         printf("Error\n");
@@ -67,9 +97,8 @@ void testSuite() {
     fAssertEqual(0.0,newArea,floatTol);
 
     test__rTreeTraverseToLeaf();
-    /**
-     * 
-     * */
+    test__rTreeInsertPoint();
+
 }
 
 
