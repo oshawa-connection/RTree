@@ -8,11 +8,12 @@
                 "cwd": "${workspaceFolder}"
             },
             "args": [
+                "-g",
                 "${workspaceFolder}/*/**.c",
                 // "${workspaceFolder}/*/**.h",
                 "-o",
                 "helloWorld.out",
-                "-g"
+                
             ],
         },
         // {

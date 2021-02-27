@@ -24,7 +24,7 @@ float BboxArea(BBox * bbox) {
 float BboxMinEnlargementArea(BBox * bbox, Point * point) {
 
     float currentArea = BboxArea(bbox);
-    BBox enlargenedBBox = {bbox->minX,bbox->minY,bbox->maxX,bbox->maxY};
+    BBox enlargenedBBox = {0,bbox->minX,bbox->minY,bbox->maxX,bbox->maxY};
     if (point->x > bbox->maxX) {
         enlargenedBBox.maxX = point->x;
     } 

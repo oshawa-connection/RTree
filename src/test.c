@@ -6,33 +6,33 @@
 
 const float floatTol = 0.001;
 
-static void iAssertEqual(int expected, int actual) {
+static void iAssertEqual(int expected, int actual, char * message) {
     if (!(expected == actual)) {
-        printf("Assertation failed. Expected %d to equal %d.",expected, actual);
+        printf("Assertation failed: %s; Expected %d to equal %d.\n",message,expected, actual);
     }
 }
 
-static void fAssertEqual(float expected, float actual, float tolerance) {
+static void fAssertEqual(float expected, float actual, float tolerance, char * message) {
     float difference = fabs(expected - actual);
     
     if (!(difference < tolerance)) {
-        printf("Assertation failed. Expected %f to equal %f.",expected, actual);
+        printf("Assertation failed: %s; Expected %f to equal %f.\n",message,expected, actual);
     }
 }
 
 static void AssertTrue(bool value) {
     if (!value) {
-        printf("Assertation failed. Expected true but got false");
+        printf("Assertation failed. Expected true but got false\n");
     }
 }
 
 void test__rTreeTraverseToLeaf() {
-    BBox bboxLeftNode = {1,1,1.5,1.5};
+    BBox bboxLeftNode = {11,1,1,1.5,1.5};
     Node leftNode = {NULL,0,0,&bboxLeftNode,NULL};
 
-    BBox bboxRightNode = {1.5,1.5,2,2};
-    BBox rightTopBbox = {1,1.5,1.5,3};
-    BBox rightBottomBbox = {1,1,1.5,1.5};
+    BBox bboxRightNode = {22,1.5,1.5,2,2};
+    BBox rightTopBbox = {33,1,1.5,1.5,3};
+    BBox rightBottomBbox = {44,1,1,1.5,1.5};
 
     Node rightTopLeaf = {NULL,5,0,&rightTopBbox,NULL};
     Node rightBottomLeaf = {NULL,5,0,&rightBottomBbox,NULL};
@@ -47,20 +47,22 @@ void test__rTreeTraverseToLeaf() {
     Point myPoint = {1.25,1.25};
     Node * foundNode = _rTreeTraverseToLeaf(&rTree, &myPoint);
     
-    fAssertEqual(rightBottomBbox.maxX,foundNode->bbox->maxX,floatTol);
+    char str[] = "My message here";
+
+    fAssertEqual(rightBottomBbox.maxX,foundNode->bbox->maxX,floatTol,str);
 }
 
 void test__rTreeInsertPoint() {
-
+    
     BBox bboxLeftNode = {1,1,1.5,1.5};
     Node leftNode = {NULL,0,0,&bboxLeftNode,NULL};
 
-    BBox bboxRightNode = {1.5,1.5,2,2};
-    BBox rightTopBbox = {1,1.5,1.5,3};
-    BBox rightBottomBbox = {1,1,1.5,1.5};
+    BBox bboxRightNode = {11,1.5,1.5,2,2};
+    BBox rightTopBbox = {22,1,1.5,1.5,3};
+    BBox rightBottomBbox = {33,1,1,1.5,1.5};
     
     Node rightTopLeaf = {NULL,5,0,&rightTopBbox,NULL};
-    Point rightBottomPoints[3] = {{1.1,1.1},{1.1,1.1},{1.1,1.1}};
+    Point rightBottomPoints[5] = {{1.1,1.1},{1.1,1.1},{1.1,1.1}};
     Node rightBottomLeaf = {&rightBottomPoints,3,0,&rightBottomBbox,NULL};
 
     Node rightNodeChildren[] = {rightTopLeaf,rightBottomLeaf};
@@ -75,7 +77,9 @@ void test__rTreeInsertPoint() {
     
     Node * editedLeaf = _rTreeInsertPoint(&rTree,&myPoint);
     
-    iAssertEqual(rightBottomLeaf.nPoints +1,editedLeaf->nPoints);
+    char str[] = "never"; 
+    
+    iAssertEqual(rightBottomLeaf.nPoints +1,editedLeaf->nPoints,str);
 }
 
 void testSuite() {
@@ -91,12 +95,17 @@ void testSuite() {
     BBox myFirstBbox = {1.0,1.0,3.0,3.0};
     Point outOfBoundsPoint = {4.0,4.0};
     float newArea = BboxMinEnlargementArea(&myFirstBbox,&outOfBoundsPoint);
-    fAssertEqual(5,newArea,floatTol);
+    
+    char someMessage[] = "Press F to pay respects";
+    printf("%s",someMessage);
+    fAssertEqual(5,newArea,floatTol,someMessage);
     Point inBoundsPoint = {1.5,1.5};
     newArea = BboxMinEnlargementArea(&myFirstBbox,&inBoundsPoint);
-    fAssertEqual(0.0,newArea,floatTol);
-
-    test__rTreeTraverseToLeaf();
+    char someOtherMessage[] = "Press E to pay respects\n";
+    printf("Not crashed\n");
+    fAssertEqual(6.0,newArea,floatTol,someOtherMessage);
+    printf("How rude\n");
+    // test__rTreeTraverseToLeaf();
     test__rTreeInsertPoint();
 
 }

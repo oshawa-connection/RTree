@@ -2,6 +2,7 @@
 #include "Point.h"
 
 typedef struct {
+    int id;
     float minX;
     float minY;
     float maxX;

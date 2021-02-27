@@ -14,6 +14,7 @@
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
+            "args": ["-test"],
             // "console": "externalTerminal",
             "MIMode": "lldb",
             "preLaunchTask": "g++.exe build active file"
