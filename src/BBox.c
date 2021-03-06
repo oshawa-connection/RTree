@@ -45,7 +45,7 @@ float BboxMinEnlargementArea(BBox * bbox, Point * point) {
     
 }
 
-void bboxEnlargen(BBox * bbox, Point * point) {
+void BboxEnlargen(BBox * bbox, Point * point) {
     if (point->x > bbox->maxX) {
         bbox->maxX = point->x;
     } 
@@ -61,4 +61,11 @@ void bboxEnlargen(BBox * bbox, Point * point) {
     if (point->y < bbox->minY) {
         bbox->minY = point->y;
     }
+}
+
+/**
+ * Split a bbox into two parts
+ * */
+void BboxSplit(BBox * bbox, BBox * newBBoxes) {
+    
 }

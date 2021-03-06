@@ -92,7 +92,7 @@ void testSuite() {
     /**
      * Test BBox
      * */
-    BBox myFirstBbox = {1.0,1.0,3.0,3.0};
+    BBox myFirstBbox = {1,1.0,1.0,3.0,3.0};
     Point outOfBoundsPoint = {4.0,4.0};
     float newArea = BboxMinEnlargementArea(&myFirstBbox,&outOfBoundsPoint);
     
@@ -102,9 +102,9 @@ void testSuite() {
     Point inBoundsPoint = {1.5,1.5};
     newArea = BboxMinEnlargementArea(&myFirstBbox,&inBoundsPoint);
     char someOtherMessage[] = "Press E to pay respects\n";
-    printf("Not crashed\n");
+    
     fAssertEqual(6.0,newArea,floatTol,someOtherMessage);
-    printf("How rude\n");
+    
     // test__rTreeTraverseToLeaf();
     test__rTreeInsertPoint();
 
