@@ -9,7 +9,18 @@ typedef struct {
     float maxY;
 } BBox;
 
-// short _BboxContainsPoint(BBox * bbox, Point * point);
+// /**
+//  * 
+//  * */
+// BBox * BBoxNew(int id) {
+//     BBox * myBBox = malloc(sizeof *myBBox);
+//     return myBBox;
+// }
+
+// BBox * BBoxDelete() {
+//     BBox * myBBox = malloc(sizeof *myBBox);
+//     return myBBox;
+// }
 
 float BboxArea(BBox * bbox);
 /*
@@ -19,4 +30,4 @@ float BboxMinEnlargementArea(BBox * bbox, Point * point);
 
 void BboxEnlargen(BBox * bbox, Point * point);
 
-BBox * BboxSplit(BBox * bbox,BBox * newBBoxes);
+void BboxSplit(BBox * bbox,BBox * newBBoxes);

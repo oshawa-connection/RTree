@@ -54,12 +54,12 @@ void test__rTreeTraverseToLeaf() {
 
 void test__rTreeInsertPoint() {
     
-    BBox bboxLeftNode = {1,1,1.5,1.5};
+    BBox bboxLeftNode = {1,1.0,1.0,1.5,1.5};
     Node leftNode = {NULL,0,0,&bboxLeftNode,NULL};
 
-    BBox bboxRightNode = {11,1.5,1.5,2,2};
-    BBox rightTopBbox = {22,1,1.5,1.5,3};
-    BBox rightBottomBbox = {33,1,1,1.5,1.5};
+    BBox bboxRightNode = {2,1.5,1.5,2,2};
+    BBox rightTopBbox = {3,1,1.5,1.5,3};
+    BBox rightBottomBbox = {4,1,1,1.5,1.5};
     
     Node rightTopLeaf = {NULL,5,0,&rightTopBbox,NULL};
     Point rightBottomPoints[5] = {{1.1,1.1},{1.1,1.1},{1.1,1.1}};
@@ -71,7 +71,7 @@ void test__rTreeInsertPoint() {
     Node nextNodes[] = {leftNode,rightNode};
     Node rootNode = {NULL,10,2,NULL,&nextNodes};
     RTree rTree = {1,5,&rootNode,NULL};
-
+    
 
     Point myPoint = {1.25,1.25};
     
@@ -96,14 +96,17 @@ void testSuite() {
     Point outOfBoundsPoint = {4.0,4.0};
     float newArea = BboxMinEnlargementArea(&myFirstBbox,&outOfBoundsPoint);
     
-    char someMessage[] = "Press F to pay respects";
-    printf("%s",someMessage);
+    char someMessage[] = "New Area should be calculated correctly\n";
+    // 9 - 4 = 5
     fAssertEqual(5,newArea,floatTol,someMessage);
+
+
     Point inBoundsPoint = {1.5,1.5};
     newArea = BboxMinEnlargementArea(&myFirstBbox,&inBoundsPoint);
     char someOtherMessage[] = "Press E to pay respects\n";
     
-    fAssertEqual(6.0,newArea,floatTol,someOtherMessage);
+    // No new area to add so 0
+    fAssertEqual(0,newArea,floatTol,someOtherMessage);
     
     // test__rTreeTraverseToLeaf();
     test__rTreeInsertPoint();

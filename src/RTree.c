@@ -26,8 +26,9 @@ Node * _rTreeTraverseToLeaf(RTree * rTree, Point * point) {
                 
             }
         }
-        // TODO: And enlargen the bbox if enlargementArea > 0
+        // TODO: And enlargen the bbox if enlargementArea > 0 in insert 
         currentNode = smallestEnlargementNode;  
+        printf("The smallest bbox had id: %d\n",smallestEnlargementNode->bbox->id);
     }
     
     return currentNode;

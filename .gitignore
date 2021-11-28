@@ -1,13 +1,16 @@
 # *.dSYM
 # *.plist
 # *.out
-*
-!.gitignore
-!*.c
-!*.h
-!*.md
-!*.sh
 
+
+*
+!cmake/Modules/
+!/CMakeLists.txt
+!/.gitignore
+!src/
+!/readMe.md
+!*.sh
+!tests/
 !*/
 !*.vscode/*
 *.dSYM
