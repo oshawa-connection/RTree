@@ -9,7 +9,7 @@
             "name": "(lldb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/helloWorld.out",
+            "program": "${workspaceFolder}/all_tests",
             // "args": ["-test"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -17,7 +17,7 @@
             "args": ["-test"],
             // "console": "externalTerminal",
             "MIMode": "lldb",
-            "preLaunchTask": "g++.exe build active file"
+            // "preLaunchTask": "g++.exe build active file"
         }
     ]
 }

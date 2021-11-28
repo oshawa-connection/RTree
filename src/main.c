@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include "../headers/RTree.h"
+// #include "../headers/RTree.h"
 #include <math.h>
 #include <string.h>
-#include "../headers/testUtils.h"
+// #include "../headers/testUtils.h"
 
 int main(int argc, char **argv) {
     
@@ -11,7 +11,7 @@ int main(int argc, char **argv) {
         for (int i = 0; i < argc; ++i) {
     
             if (strcmp(argv[i], testOption)) {
-                testSuite();
+                // testSuite();
                 // fflush(stdout);
                 // fflush(stderr);
                 printf("All tests completed");

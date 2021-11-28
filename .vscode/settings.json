@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "rtree.h": "c",
-        "testutils.h": "c"
+        "testutils.h": "c",
+        "node.h": "c",
+        "__node_handle": "cpp"
     }
 }

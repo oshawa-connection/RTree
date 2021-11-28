@@ -1,7 +1,7 @@
 #pragma once
 #include "Point.h"
 
-typedef struct {
+typedef struct BBox{
     int id;
     float minX;
     float minY;

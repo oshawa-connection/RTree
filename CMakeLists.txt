@@ -3,7 +3,8 @@
 
 
 cmake_minimum_required(VERSION 3.14)
-
+# TODO: do this from cmake options instead.
+SET(CMAKE_BUILD_TYPE Debug)
 
 
 PROJECT (RTree)
@@ -27,7 +28,11 @@ enable_testing()
 
 add_executable(
   all_tests
+  src/Node.c
   tests/all_tests.cc
+  tests/node_test.cc
+  
+
 )
 
 target_link_libraries(
@@ -46,7 +51,8 @@ add_executable(
   rtree
   src/main.c 
   src/BBox.c 
+  src/Node.c
   src/RTree.c
-  src/test.c
+  
 )
 

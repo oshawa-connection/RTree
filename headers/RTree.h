@@ -1,42 +1,31 @@
 #pragma once
 #include <stdio.h>
 #include "BBox.h"
-#include <float.h>
 #include "types.h"
-
-
-
-typedef struct Node {
-    Point ** points;
-    int nPoints;
-    int nNodes;
-    BBox * bbox;
-    struct Node * nextNodes;
-} Node;
-
+#include "Node.h"
 
 typedef struct {
     int depth;
     int maxPointsPerNode;
-    Node * rootNode; // does not store points! Only Bboxes!
+    NodePtr rootNode; // does not store points! Only Bboxes!
     BBox * overallBbox;
 } RTree;
 
 /**
  * 
  * */
-bool _nodeIsALeaf(Node * node);
+bool _nodeIsALeaf(NodePtr node);
 
-Node * _rTreeTraverseToLeaf(RTree * rTree, Point * point);
-
-/**
- * 
- * */
-Node * _rTreeInsertPoint(RTree * rTree, Point * newPoint);
-
+NodePtr _rTreeTraverseToLeaf(RTree * rTree, Point * point);
 
 /**
  * 
  * */
-void _rTreeSearch(RTree * rTree, Node * queryNode);
+NodePtr _rTreeInsertPoint(RTree * rTree, Point * newPoint);
+
+
+/**
+ * 
+ * */
+void _rTreeSearch(RTree * rTree, NodePtr queryNode);
 
