@@ -1,16 +1,14 @@
-# *.dSYM
-# *.plist
-# *.out
-
-
-*
-!cmake/Modules/
-!/CMakeLists.txt
-!/.gitignore
-!src/
-!/readMe.md
-!*.sh
-!tests/
-!*/
-!*.vscode/*
+_deps/
+.DS_Store
+bin/
+CMakeFiles/
 *.dSYM
+*.out
+*.cmake
+CMakeCache.txt
+Makefile
+*.md
+!/readMe.md
+*.a
+rtree
+all_tests

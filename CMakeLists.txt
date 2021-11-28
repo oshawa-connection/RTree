@@ -47,5 +47,6 @@ add_executable(
   src/main.c 
   src/BBox.c 
   src/RTree.c
+  src/test.c
 )
 
