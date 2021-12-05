@@ -3,6 +3,8 @@
         "rtree.h": "c",
         "testutils.h": "c",
         "node.h": "c",
-        "__node_handle": "cpp"
+        "__node_handle": "cpp",
+        "__locale": "cpp",
+        "thread": "cpp"
     }
 }

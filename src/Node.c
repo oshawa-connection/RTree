@@ -2,10 +2,10 @@
 #include "../headers/BBox.h"
 #include <stdlib.h>
 
-const int MAX_POINTS_PER_NODE = 10;
+
 
 typedef struct Node {
-    Point * points;
+    Point ** points;
     int nPoints;
     int nNodes;
     BBox * bbox;
@@ -23,8 +23,11 @@ NodePtr createNode(BBox * bbox) {
     return node;
 }
 
-
+// We don't want to free the points or the other nodes, which get split between 
+// the two split nodes.
+// The bbox does get freed though.
 void deleteNode(NodePtr node) {
+    free(node->bbox);
     free(node);
 }
 
@@ -50,9 +53,19 @@ NodePtr getChildNodeAt(NodePtr node, int childNodeIndex) {
 }
 
 bool addPointToNode(NodePtr node,Point * point) {
-    if (node->nNodes >= MAX_POINTS_PER_NODE) {
-
+    if (node->nPoints >= MAX_POINTS_PER_NODE) {
+        // Cannot insert here, requires a split
+        return false;
     }
+    if (node->nPoints == 0) {
+        // Hacky, some compiler options (and CPP) may complain.
+        node->points = (Point **) malloc(sizeof(Point **) * MAX_POINTS_PER_NODE);
+    }
+
+    node->points[node->nPoints] = point;
+
+    node->nPoints += 1;
+    return true;
 }
 
 // NodeSplitResult * splitNode(NodePtr node) {

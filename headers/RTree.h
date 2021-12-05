@@ -6,7 +6,7 @@
 
 typedef struct {
     int depth;
-    int maxPointsPerNode;
+    int maxPointsFORNode;
     NodePtr rootNode; // does not store points! Only Bboxes!
     BBox * overallBbox;
 } RTree;

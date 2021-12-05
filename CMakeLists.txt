@@ -1,5 +1,6 @@
 # Make sure to do "cmake -DCMAKE_C_COMPILER=/usr/bin/gcc" before running this the first time.
 # after that, it _should_ be cached.
+# This is bad, instead, should be managed through environment variables.
 
 
 cmake_minimum_required(VERSION 3.14)

@@ -4,6 +4,9 @@
 #include <stdbool.h>
 #include "./BBox.h"
 
+// Needed in header to allow testing
+# define MAX_POINTS_PER_NODE 10
+
 typedef struct Node * NodePtr;
 
 /**

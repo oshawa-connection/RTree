@@ -12,7 +12,7 @@ NodePtr _rTreeTraverseToLeaf(RTree * rTree, Point * point) {
         NodePtr smallestEnlargementNode = NULL;
         int nodeCount = 0;
         NodePtr currentChild;
-        while(currentChild = getChildNodeAt(currentNode,nodeCount++)) {
+        while((currentChild = getChildNodeAt(currentNode,nodeCount++))) {
             float enlargementArea = BboxMinEnlargementArea(getNodeBBox(currentChild),point);
             if (currentMin > enlargementArea) {
                 currentMin = enlargementArea;
@@ -44,7 +44,7 @@ NodePtr _rTreeInsertPoint(RTree * rTree, Point * newPoint) {
     // printf("leafnode MaxY is %f\n",leafNode->bbox->maxY);
     // printf("leafnode MaxX is %f\n",leafNode->bbox->maxX);
 
-    // if (leafNode->nPoints + 1 < rTree->maxPointsPerNode) {
+    // if (leafNode->nPoints + 1 < rTree->maxPointsFORNode) {
     //     int index = leafNode->nPoints + 1;
     //     printf("Leaf Node has %d points",leafNode->nPoints);
     //     leafNode->points[index] = newPoint;
