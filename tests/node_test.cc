@@ -4,7 +4,8 @@
 #include "../src/Node.c"
 #include "../headers/Point.h"
 // #include "../headers/Node.h"
-#include "../headers/BBox.h"
+#include "../src/BBox.c"
+#include "../src/Point.c"
 
 TEST(NodeTests, CanCreateAndDestroy) {
     BBox bbox = {1,1.0,1.0f,1.0,1.0};
@@ -45,7 +46,7 @@ TEST(NodeTests, CanAddPoint) {
     
     EXPECT_TRUE(result);
     // This might cause a crash because when we free a stack allocated variable (bbox), it might not like it.
-    // TODO: malloc bbox here.
+    // TODO: malloc bbox instead.
     free(someNode);
 }
 
@@ -60,4 +61,25 @@ TEST(NodeTests, TellsWhenToSplitNode) {
 
     EXPECT_FALSE(result);
     free(someNode);
+}
+
+TEST(NodeTests,SplitsCorrectly) {
+    BBox bbox = {1,1.0,1.0,1.0,1.0};
+    NodePtr someNode = createNode(&bbox);
+    Point somePoint = {1.0f,2.0f};
+    
+    bool result = true;
+    //Varience is in Y.
+    for(int i =0; i < MAX_POINTS_PER_NODE +5;i ++) {
+        // memory leak
+        Point * point = createPoint(1,(float)i);
+        result = addPointToNode(someNode, point);
+    }
+
+    NodeSplitResult * splitResult = splitNode(someNode);
+    EXPECT_FALSE(splitResult->error);
+    EXPECT_NE(splitResult->leftNode,(Node *)NULL);
+    EXPECT_NE(splitResult->rightNode,(Node * )NULL);
+    // Could also use EXPECT_NEAR here.
+    EXPECT_FLOAT_EQ(splitResult->leftNode->bbox->minX,bbox.minX);
 }

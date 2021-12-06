@@ -12,10 +12,9 @@ typedef struct BBox{
 // /**
 //  * 
 //  * */
-// BBox * BBoxNew(int id) {
-//     BBox * myBBox = malloc(sizeof *myBBox);
-//     return myBBox;
-// }
+BBox * createBBox(int id,float minX, float minY, float maxX, float maxY);
+
+void deleteBBox(BBox * bbxptr);
 
 // BBox * BBoxDelete() {
 //     BBox * myBBox = malloc(sizeof *myBBox);

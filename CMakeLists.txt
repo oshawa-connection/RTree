@@ -1,6 +1,5 @@
 # Make sure to do "cmake -DCMAKE_C_COMPILER=/usr/bin/gcc" before running this the first time.
 # after that, it _should_ be cached.
-# This is bad, instead, should be managed through environment variables.
 
 
 cmake_minimum_required(VERSION 3.14)
@@ -29,7 +28,10 @@ enable_testing()
 
 add_executable(
   all_tests
+  src/BBox.c 
   src/Node.c
+  src/RTree.c
+  src/Point.c
   tests/all_tests.cc
   tests/node_test.cc
   
@@ -54,6 +56,6 @@ add_executable(
   src/BBox.c 
   src/Node.c
   src/RTree.c
-  
+  src/Point.c
 )
 

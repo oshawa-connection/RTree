@@ -1,5 +1,19 @@
 #include "../headers/BBox.h"
 
+
+BBox * createBBox(int id,float minX, float minY, float maxX, float maxY) {
+    BBox * myBBox = (BBox *)malloc(sizeof(BBox));
+    myBBox->minX = minX;
+    myBBox->minY = minY;
+    myBBox->maxX = maxX;
+    myBBox->maxY = maxY;
+    return myBBox;
+}
+
+void deleteBBox(BBox * bbxptr) {
+    free(bbxptr);
+}
+
 short _BboxContainsPoint(BBox * bbox, Point * point) {
     if (point->x < bbox->minX || point->x > bbox->maxX) {
         return 0;
