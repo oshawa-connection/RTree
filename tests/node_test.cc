@@ -64,6 +64,7 @@ TEST(NodeTests, TellsWhenToSplitNode) {
 }
 
 TEST(NodeTests,SplitsCorrectly) {
+    // TODO: Once we set up bbox enlargen, this will not work. We also need to allow node to free the bbox.
     BBox * bbox = createBBox(1,1.0,1.0,1.0,1.0);
     NodePtr someNode = createNode(bbox);
     Point somePoint = {1.0f,2.0f};
@@ -83,13 +84,17 @@ TEST(NodeTests,SplitsCorrectly) {
     EXPECT_NE(splitResult->rightNode,(Node * )NULL);
     // Could also use EXPECT_NEAR here.
 
+
+    // expect it to free the node and set it to NULL;
+    EXPECT_EQ(someNode, (Node * ) NULL);
+
     //mx,My     Mx,My
     // x ------ x
     // |        |
     // |        |
     // x ------ x Mx, my
     //mx,my
-
+    // TODO: Once we set up bbox enlargen, this will not work. We also need to allow node to free the bbox.
     EXPECT_FLOAT_EQ(splitResult->leftNode->bbox->minX,bbox->minX);
     EXPECT_FLOAT_EQ(splitResult->leftNode->bbox->maxX,bbox->maxX);
     
