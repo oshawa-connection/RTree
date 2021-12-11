@@ -83,3 +83,12 @@ void BboxEnlargen(BBox * bbox, Point * point) {
 void BboxSplit(BBox * bbox, BBox * newBBoxes) {
     
 }
+
+
+bool BBoxContains(BBox * bbox, Point * point) {
+    if (bbox->minX > bbox->minX) return false;
+    if (bbox->minY > bbox->minY) return false;
+    if (bbox->maxX < bbox->maxX) return false;
+    if (bbox->maxY < bbox->maxY) return false;
+    return true;
+}

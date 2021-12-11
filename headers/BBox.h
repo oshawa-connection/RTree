@@ -1,6 +1,6 @@
 #pragma once
 #include "Point.h"
-
+#include <stdbool.h>
 typedef struct BBox{
     int id;
     float minX;
@@ -30,3 +30,5 @@ float BboxMinEnlargementArea(BBox * bbox, Point * point);
 void BboxEnlargen(BBox * bbox, Point * point);
 
 void BboxSplit(BBox * bbox,BBox * newBBoxes);
+
+bool BBoxContains(BBox * bbox, Point * point);

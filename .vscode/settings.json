@@ -5,6 +5,8 @@
         "node.h": "c",
         "__node_handle": "cpp",
         "__locale": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "ios": "cpp",
+        "ranges": "c"
     }
 }

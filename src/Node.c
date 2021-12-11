@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+typedef enum {X_DIRECTION,Y_DIRECTION} splitDirection;
 
 typedef struct Node {
     Point ** points;
@@ -29,6 +30,7 @@ NodePtr createNode(BBox * bbox) {
 // The bbox does get freed though.
 void deleteNode(NodePtr node) {
     free(node);
+    node = NULL;
 }
 
 
@@ -113,13 +115,34 @@ double calculateVarienced(double * dvalues, size_t numberOfValues) {
     return sum / (numberOfValues -1);
 }
 
+// This is a key function. Determining the split direction determines the performance of the RTree for searching.
+splitDirection determineSplitDirection(double * pointXValues, double * pointYValues, size_t nValues) {
+    double xVarience = calculateVarienced(pointXValues,nValues);
+    double yVarience = calculateVarienced(pointYValues, nValues);
 
+    // if they are the same, just return Y.
+    if (xVarience > yVarience) {
+        return X_DIRECTION;
+    } else {
+        return Y_DIRECTION;
+    }
+}
+
+int cmpfuncd (const void * a, const void * b) {
+   return ( *(double*)a - *(double*)b );
+}
+
+double caculateMediand(double * dvalues, size_t numberOfValues) {
+    qsort(dvalues, numberOfValues, sizeof(double), cmpfuncd);
+    int middleIndex = ceil(numberOfValues /2 );
+    return dvalues[middleIndex];
+}
 
 
 NodeSplitResult * splitNode(NodePtr node) {
     NodeSplitResult * splitResult = (NodeSplitResult *) malloc(sizeof(NodeSplitResult *));
-    if(node->nPoints <= 1) {
-        fprintf(stderr, "The node you are trying to split has %d points so it cannot be split.", node->nPoints);
+    if(node->nPoints <= 3 || node->nNodes != 0) {
+        fprintf(stderr, "The node you are trying to split has %d points and %d child nodes so it cannot be split.", node->nPoints, node->nNodes);
         splitResult->error = true;
     }
     
@@ -131,13 +154,33 @@ NodeSplitResult * splitNode(NodePtr node) {
         pointYValues[i] = node->points[i]->y;
     }
 
-    double xVarience = calculateVarienced(pointXValues,node->nPoints);
-    double yVarience = calculateVarienced(pointYValues, node->nPoints);
-
-    BBox * bboxPtr = createBBox(2,2.2,2.2,2.2,3.3);
+    splitDirection result = determineSplitDirection(pointXValues, pointYValues, node->nPoints);
     //Now based on greater varience, split in that direction.
-    splitResult->leftNode = createNode(bboxPtr);
-    splitResult->leftNode = createNode(bboxPtr);
+
+    if (result == X_DIRECTION) {
+        double medianX = caculateMediand(pointXValues, node->nPoints);
+        BBox * leftbboxPtr = createBBox(0,node->bbox->minX,node->bbox->minY,medianX,node->bbox->maxY);
+        BBox * rightbboxPtr = createBBox(0,medianX,node->bbox->minY,node->bbox->maxX,node->bbox->maxY);
+        splitResult->leftNode = createNode(leftbboxPtr);
+        splitResult->rightNode = createNode(rightbboxPtr);
+    } else {
+        double medianY = caculateMediand(pointYValues, node->nPoints);
+        BBox * leftbboxPtr = createBBox(0,node->bbox->minX,node->bbox->minY,node->bbox->maxX,medianY);
+        BBox * rightbboxPtr = createBBox(0,node->bbox->minX,medianY,node->bbox->maxX,node->bbox->maxY);
+        splitResult->leftNode = createNode(leftbboxPtr);
+        splitResult->rightNode = createNode(rightbboxPtr);
+    }
+    
+    // now distribute points between two new nodes.
+    // for (int nodeIndex = 0; nodeIndex < node->nPoints; nodeIndex ++) {
+    //     node[]
+    // }
+    // free the current node and its children!
+    // deleteBBox(node->bbox);
+    deleteNode(node);
+    free(pointXValues);
+    free(pointYValues);
+    
     return splitResult;
 }
 
