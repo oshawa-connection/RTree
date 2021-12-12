@@ -4,23 +4,25 @@
 #include "types.h"
 #include "Node.h"
 
-typedef struct {
-    int depth;
-    NodePtr rootNode; 
-} RTree;
+typedef struct RTree * RTreePtr;
 
-RTree * createRTree();
 
-NodePtr _rTreeTraverseToLeaf(RTree * rTree, Point * point);
 
-/**
- * 
- * */
-NodePtr _rTreeInsertPoint(RTree * rTree, Point * newPoint);
+RTreePtr createRTree();
+
+void deleteRTree(RTreePtr* rtree);
+
+int getRTreeDepth(RTreePtr rtree);
 
 
 /**
  * 
  * */
-void _rTreeSearch(RTree * rTree, NodePtr queryNode);
+void RTreeInsertPoint(RTreePtr rTree, Point * newPoint);
+
+
+/**
+ * 
+ * */
+void _rTreeSearch(RTreePtr rTree, NodePtr queryNode);
 

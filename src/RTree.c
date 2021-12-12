@@ -4,16 +4,54 @@
 #include <stdlib.h>
 #include "../headers/BBox.h"
 #include <glib.h>
+#include "../headers/Node.h"
+#include <stdbool.h>
+#include <stdio.h>
 
-RTree * createRTree() {
-    RTree * rtree = (RTree *)malloc(sizeof(RTree));
+#define RTREE_MAX_DEPTH 100
+
+typedef struct RTree {
+    int depth;
+    NodePtr rootNode; 
+    GQueue* nodeQueue;
+} RTree;
+
+
+RTreePtr createRTree() {
+    RTreePtr rtree = (RTreePtr)malloc(sizeof(RTree));
     BBox * bbox = createBBox(0,0.0,0.0,0.0,0.0);
+    
     rtree->rootNode = createNode(bbox);
+    rtree->nodeQueue = g_queue_new();
+    
     return rtree;
 }
 
+/**
+ * TODO: Run through the tree, freeing all child nodes too.
+ * 
+ * */
+void deleteRTree(RTreePtr* rtree) {
+    RTreePtr rtreePtr = *rtree;
+    g_queue_free(rtreePtr->nodeQueue);
+    free(*rtree);
+    *rtree = NULL;
+}
 
-NodePtr _rTreeTraverseToLeaf(RTree * rTree, Point * point) {
+int getRTreeDepth(RTreePtr rtree) {
+    return rtree->depth;
+}
+
+void addNodeToEnlargenQueue(RTreePtr rtree, NodePtr nodeToAdd) {
+    g_queue_push_head(rtree->nodeQueue,nodeToAdd);
+    // NodePtr myX = (NodePtr)g_queue_pop_head(myQueue);
+}
+
+
+// Go from RootNode to leaf.
+//at each level, select the node, L, whose MBR will require the minimum area enlargement
+//to cover E.mbr
+NodePtr _rTreeTraverseToLeaf(RTreePtr rTree, Point * point) {
     NodePtr currentNode = rTree->rootNode;
     
     while (!(nodeIsLeaf(currentNode))) {
@@ -26,6 +64,7 @@ NodePtr _rTreeTraverseToLeaf(RTree * rTree, Point * point) {
             if (currentMin > enlargementArea) {
                 currentMin = enlargementArea;
                 smallestEnlargementNode = currentChild;
+                addNodeToEnlargenQueue(rTree,currentChild);
             }
         }
         // TODO: And enlargen the bbox if enlargementArea > 0 in insert 
@@ -42,49 +81,29 @@ NodePtr _rTreeTraverseToLeaf(RTree * rTree, Point * point) {
  * 
  * 
  * */
-NodePtr _rTreeInsertPoint(RTree * rTree, Point * newPoint) {
-    // Go from RootNode to leaf.
-    //at each level, select the node, L, whose MBR will require the minimum area enlargement
-    //to cover E.mbr
-    
-    // NodePtr currentNode = rTree->rootNode;
-    // NodePtr leafNode = _rTreeTraverseToLeaf(rTree,newPoint);
-    
-    // printf("leafnode MaxY is %f\n",leafNode->bbox->maxY);
-    // printf("leafnode MaxX is %f\n",leafNode->bbox->maxX);
+void RTreeInsertPoint(RTreePtr rTree, Point * newPoint) {
+    NodePtr bestNode = _rTreeTraverseToLeaf(rTree,newPoint);
+    if(addPointToNode(bestNode,newPoint) == false) {
+        rTree->depth += 1;
+        if (rTree->depth > RTREE_MAX_DEPTH) {
+            fprintf(stderr,"RTree is exceeding maximum depth, exiting\n");
+            exit(1);
+        }
+        if(splitNode(bestNode) == false) {
+            exit(1);
+        } else {
+            return RTreeInsertPoint(rTree, newPoint);
+        }
+    }
 
-    // if (leafNode->nPoints + 1 < rTree->maxPointsFORNode) {
-    //     int index = leafNode->nPoints + 1;
-    //     printf("Leaf Node has %d points",leafNode->nPoints);
-    //     leafNode->points[index] = newPoint;
-    //     leafNode->nPoints ++;
-        
-    // } else {
-    //     printf("... so performing the split.\n");
-    //     // Here, you have to split the leafNode.
-    //     // Enlargen 
-    //     // set to 0 and split the points in amongst the two new children
-    //     leafNode->nPoints = 0;
-        
-    //     // Node rightTopLeaf = {NULL,5,0,&rightTopBbox,NULL};
-
-
-    
-
-    // }
-    
-    // // Enlargen bbox if necessary
-    // // bboxEnlargen
-    // // leafNode->bbox
-    // return leafNode;
-    return rTree->rootNode;
+    //Now enlargen all in the queue, including the root node.
 }
 
 
 /**
  * 
  * */
-void _rTreeSearch(RTree * rTree, NodePtr queryNode) {
+void _rTreeSearch(RTreePtr rTree, NodePtr queryNode) {
     // int numberOfChildNodes = rTree->rootNode->nNodes;
     // for(int childNodeN =0; childNodeN < numberOfChildNodes;childNodeN ++) {
         

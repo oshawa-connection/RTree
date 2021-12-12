@@ -45,10 +45,10 @@ bool nodeIsLeaf(Node * node) {
 
 
 NodePtr getChildNodeAt(NodePtr node, int childNodeIndex) {
-    if (node->points == NULL) {
+    if (node->nextNodes == NULL) {
         return NULL;
     }
-    if (childNodeIndex > node->nPoints) {
+    if (childNodeIndex >= node->nNodes) {
         return NULL;
     }
     return node->nextNodes[childNodeIndex];
@@ -145,12 +145,11 @@ void addSplitResultToNode(NodePtr node, Node * leftNode, Node * rightNode) {
     node->nextNodes[1] = rightNode;
 }
 
-NodeSplitResult * splitNode(NodePtr * nodePtr) {
-    NodePtr node = *nodePtr;
+bool splitNode(NodePtr node) {
     NodeSplitResult * splitResult = (NodeSplitResult *) malloc(sizeof(NodeSplitResult *));
     if(node->nPoints <= 3 || node->nNodes != 0) {
         fprintf(stderr, "The node you are trying to split has %d points and %d child nodes so it cannot be split.", node->nPoints, node->nNodes);
-        splitResult->error = true;
+        return false;
     }
     
     double * pointXValues = (double *) malloc(sizeof(double) * node->nPoints);
@@ -181,22 +180,28 @@ NodeSplitResult * splitNode(NodePtr * nodePtr) {
         rightNode = createNode(rightbboxPtr);
     }
     
+    int leftPoints =0;
+    int rightPoints = 0;
+
     // now distribute points between two new nodes.
     for (int pointIndex = 0; pointIndex < node->nPoints; pointIndex ++) {
         Point * currentPoint = node->points[pointIndex];
         if (BBoxContains(leftNode->bbox,currentPoint)) {
             addPointToNode(leftNode,currentPoint);
+            leftPoints += 1;
         } else {
             addPointToNode(rightNode,currentPoint);
+            rightPoints +=1;
         }
+        
     }
-
+    fprintf(stdout,"LEFT: %d, RIGHT%d\n",leftPoints,rightPoints);
     addSplitResultToNode(node,leftNode,rightNode);
 
     free(pointXValues);
     free(pointYValues);
     
-    return splitResult;
+    return true;
 }
 
 

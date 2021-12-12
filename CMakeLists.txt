@@ -65,4 +65,5 @@ add_executable(
 )
 
 target_link_libraries(rtree ${LIBS})
+target_link_libraries(all_tests ${LIBS})
 message(${Glib_INCLUDE_DIRS})

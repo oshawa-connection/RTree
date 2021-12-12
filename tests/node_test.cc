@@ -78,8 +78,8 @@ TEST(NodeTests,SplitsCorrectly) {
         result = addPointToNode(someNode, point);
     }
 
-    NodeSplitResult * splitResult = splitNode(&someNode);
-    EXPECT_FALSE(splitResult->error);
+    bool splitResult = splitNode(someNode);
+    EXPECT_TRUE(splitResult);
     EXPECT_EQ(someNode->nPoints,0);
     
     EXPECT_EQ(someNode->nNodes,2);

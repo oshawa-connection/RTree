@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "./BBox.h"
+#include "./Point.h"
 
 // Needed in header to allow testing
 # define MAX_POINTS_PER_NODE 10
@@ -17,7 +18,7 @@ typedef struct NodeSplitResult {
     bool error;
 } NodeSplitResult;
 
-
+bool addPointToNode(NodePtr node,Point * point);
 
 NodePtr createNode(BBox * bbox);
 
@@ -29,6 +30,6 @@ NodePtr getChildNodeAt(NodePtr node, int childNodeIndex);
 
 BBox * getNodeBBox(NodePtr node);
 
-NodeSplitResult * splitNode(NodePtr * node);
+bool splitNode(NodePtr node);
 
 void destroyNodeSplitResult(NodeSplitResult * nodeSplitresult);
