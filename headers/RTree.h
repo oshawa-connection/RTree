@@ -6,15 +6,10 @@
 
 typedef struct {
     int depth;
-    int maxPointsFORNode;
-    NodePtr rootNode; // does not store points! Only Bboxes!
-    BBox * overallBbox;
+    NodePtr rootNode; 
 } RTree;
 
-/**
- * 
- * */
-bool _nodeIsALeaf(NodePtr node);
+RTree * createRTree();
 
 NodePtr _rTreeTraverseToLeaf(RTree * rTree, Point * point);
 

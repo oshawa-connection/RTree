@@ -54,7 +54,12 @@ NodePtr getChildNodeAt(NodePtr node, int childNodeIndex) {
     return node->nextNodes[childNodeIndex];
 }
 
-//TODO: CALL BboxEnlargen
+
+/**
+ * TODO: Allow adding points when this is not a leaf node, 
+ * it should just increase the size of BBox. Could do this as a 
+ * seperate function if needed. 
+ * */
 bool addPointToNode(NodePtr node,Point * point) {
     if (node->nPoints >= MAX_POINTS_PER_NODE) {
         // Cannot insert here, requires a split

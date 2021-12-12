@@ -1,7 +1,16 @@
 #include "../headers/RTree.h"
 #include <float.h>
 #include "../headers/Node.h"
+#include <stdlib.h>
+#include "../headers/BBox.h"
 
+
+RTree * createRTree() {
+    RTree * rtree = (RTree *)malloc(sizeof(RTree));
+    BBox * bbox = createBBox(0,0.0,0.0,0.0,0.0);
+    rtree->rootNode = createNode(bbox);
+    return rtree;
+}
 
 
 NodePtr _rTreeTraverseToLeaf(RTree * rTree, Point * point) {
@@ -11,7 +20,7 @@ NodePtr _rTreeTraverseToLeaf(RTree * rTree, Point * point) {
         float currentMin = FLT_MAX;
         NodePtr smallestEnlargementNode = NULL;
         int nodeCount = 0;
-        NodePtr currentChild;
+        NodePtr currentChild = NULL;
         while((currentChild = getChildNodeAt(currentNode,nodeCount++))) {
             float enlargementArea = BboxMinEnlargementArea(getNodeBBox(currentChild),point);
             if (currentMin > enlargementArea) {
