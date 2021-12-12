@@ -86,9 +86,9 @@ void BboxSplit(BBox * bbox, BBox * newBBoxes) {
 
 
 bool BBoxContains(BBox * bbox, Point * point) {
-    if (bbox->minX > bbox->minX) return false;
-    if (bbox->minY > bbox->minY) return false;
-    if (bbox->maxX < bbox->maxX) return false;
-    if (bbox->maxY < bbox->maxY) return false;
+    if (bbox->minX > point->x) return false;
+    if (bbox->minY > point->y) return false;
+    if (bbox->maxX < point->x) return false;
+    if (bbox->maxY < point->y) return false;
     return true;
 }

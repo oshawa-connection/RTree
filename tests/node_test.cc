@@ -80,14 +80,14 @@ TEST(NodeTests,SplitsCorrectly) {
 
     NodeSplitResult * splitResult = splitNode(&someNode);
     EXPECT_FALSE(splitResult->error);
-    EXPECT_NE(splitResult->leftNode,(Node *)NULL);
-    EXPECT_NE(splitResult->rightNode,(Node * )NULL);
-    // Could also use EXPECT_NEAR here.
-
-
-    // expect it to free the node and set it to NULL;
-    EXPECT_EQ(someNode, (Node * ) NULL);
-
+    EXPECT_EQ(someNode->nPoints,0);
+    
+    EXPECT_EQ(someNode->nNodes,2);
+    EXPECT_NE(someNode->nextNodes, (Node **) NULL);
+    
+    Node * leftNode = someNode->nextNodes[0];
+    Node * rightNode = someNode->nextNodes[1];
+    
     //mx,My     Mx,My
     // x ------ x
     // |        |
@@ -95,11 +95,11 @@ TEST(NodeTests,SplitsCorrectly) {
     // x ------ x Mx, my
     //mx,my
     // TODO: Once we set up bbox enlargen, this will not work. We also need to allow node to free the bbox.
-    EXPECT_FLOAT_EQ(splitResult->leftNode->bbox->minX,bbox->minX);
-    EXPECT_FLOAT_EQ(splitResult->leftNode->bbox->maxX,bbox->maxX);
+    EXPECT_FLOAT_EQ(leftNode->bbox->minX,bbox->minX);
+    EXPECT_FLOAT_EQ(leftNode->bbox->maxX,bbox->maxX);
     
     //Expect that the left and right bbox will have the same maxX (left) and minX (right)
-    EXPECT_FLOAT_EQ(splitResult->leftNode->bbox->maxY,splitResult->rightNode->bbox->minY);
+    EXPECT_FLOAT_EQ(leftNode->bbox->maxY,rightNode->bbox->minY);
     // Expec that the number of points in each node is roughly equal.
-    EXPECT_NEAR(splitResult->leftNode->nPoints,splitResult->rightNode->nPoints,2);
+    EXPECT_NEAR(leftNode->nPoints,rightNode->nPoints,2);
 }

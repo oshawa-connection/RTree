@@ -2,6 +2,8 @@
 // #include "../headers/RTree.h"
 #include <math.h>
 #include <string.h>
+#include <stdlib.h>
+#include <getopt.h>
 // #include "../headers/testUtils.h"
 
 int main(int argc, char **argv) {
@@ -18,5 +20,6 @@ int main(int argc, char **argv) {
                 // return 0;
             }
         }
-    } 
+    }
+    return EXIT_SUCCESS; 
 }

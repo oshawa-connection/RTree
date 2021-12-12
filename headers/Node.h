@@ -14,8 +14,6 @@ typedef struct Node * NodePtr;
  * actually they could be split in either direction.
  * */
 typedef struct NodeSplitResult {
-    NodePtr leftNode;
-    NodePtr rightNode;
     bool error;
 } NodeSplitResult;
 

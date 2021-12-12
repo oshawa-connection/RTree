@@ -66,7 +66,7 @@ bool addPointToNode(NodePtr node,Point * point) {
     }
 
     node->points[node->nPoints] = point;
-
+    BboxEnlargen(node->bbox,point);
     node->nPoints += 1;
     return true;
 }
@@ -82,19 +82,10 @@ int getChildNodeCount(NodePtr node) {
 NodeSplitResult * createNodeSplitResult() {
     NodeSplitResult * splitResult = (NodeSplitResult *) malloc(sizeof(NodeSplitResult *));
     splitResult->error = false;
-    splitResult->leftNode = NULL;
-    splitResult->rightNode = NULL;
     return splitResult;
 }
 
 void destroyNodeSplitResult(NodeSplitResult * nodeSplitresult) {
-    if (nodeSplitresult->leftNode != NULL) {
-        free(nodeSplitresult->leftNode);
-    }
-    if (nodeSplitresult->rightNode != NULL) {
-        free(nodeSplitresult->rightNode);
-    }
-
     free(nodeSplitresult);
 }
 
@@ -139,6 +130,16 @@ double caculateMediand(double * dvalues, size_t numberOfValues) {
 }
 
 
+void addSplitResultToNode(NodePtr node, Node * leftNode, Node * rightNode) {
+    node->nPoints = 0;
+    free(node->points);
+    node->points = NULL;
+    node->nNodes = 2;
+    node->nextNodes = (Node **)malloc(sizeof(Node **) * 2);
+    node->nextNodes[0] = leftNode;
+    node->nextNodes[1] = rightNode;
+}
+
 NodeSplitResult * splitNode(NodePtr * nodePtr) {
     NodePtr node = *nodePtr;
     NodeSplitResult * splitResult = (NodeSplitResult *) malloc(sizeof(NodeSplitResult *));
@@ -158,27 +159,35 @@ NodeSplitResult * splitNode(NodePtr * nodePtr) {
     splitDirection result = determineSplitDirection(pointXValues, pointYValues, node->nPoints);
     //Now based on greater varience, split in that direction.
 
+    Node * leftNode;
+    Node * rightNode;
+
     if (result == X_DIRECTION) {
         double medianX = caculateMediand(pointXValues, node->nPoints);
         BBox * leftbboxPtr = createBBox(0,node->bbox->minX,node->bbox->minY,medianX,node->bbox->maxY);
         BBox * rightbboxPtr = createBBox(0,medianX,node->bbox->minY,node->bbox->maxX,node->bbox->maxY);
-        splitResult->leftNode = createNode(leftbboxPtr);
-        splitResult->rightNode = createNode(rightbboxPtr);
+        leftNode = createNode(leftbboxPtr);
+        rightNode = createNode(rightbboxPtr);
     } else {
         double medianY = caculateMediand(pointYValues, node->nPoints);
         BBox * leftbboxPtr = createBBox(0,node->bbox->minX,node->bbox->minY,node->bbox->maxX,medianY);
         BBox * rightbboxPtr = createBBox(0,node->bbox->minX,medianY,node->bbox->maxX,node->bbox->maxY);
-        splitResult->leftNode = createNode(leftbboxPtr);
-        splitResult->rightNode = createNode(rightbboxPtr);
+        leftNode = createNode(leftbboxPtr);
+        rightNode = createNode(rightbboxPtr);
     }
     
     // now distribute points between two new nodes.
-    // for (int nodeIndex = 0; nodeIndex < node->nPoints; nodeIndex ++) {
-    //     node[]
-    // }
-    // free the current node and its children!
-    // deleteBBox(node->bbox);
-    deleteNode(nodePtr);
+    for (int pointIndex = 0; pointIndex < node->nPoints; pointIndex ++) {
+        Point * currentPoint = node->points[pointIndex];
+        if (BBoxContains(leftNode->bbox,currentPoint)) {
+            addPointToNode(leftNode,currentPoint);
+        } else {
+            addPointToNode(rightNode,currentPoint);
+        }
+    }
+
+    addSplitResultToNode(node,leftNode,rightNode);
+
     free(pointXValues);
     free(pointYValues);
     
