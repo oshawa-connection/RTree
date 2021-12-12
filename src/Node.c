@@ -28,9 +28,9 @@ NodePtr createNode(BBox * bbox) {
 // We don't want to free the points or the other nodes, which get split between 
 // the two split nodes.
 // The bbox does get freed though.
-void deleteNode(NodePtr node) {
-    free(node);
-    node = NULL;
+void deleteNode(NodePtr * node) {
+    free(*node);
+    *node = NULL;
 }
 
 
@@ -139,7 +139,8 @@ double caculateMediand(double * dvalues, size_t numberOfValues) {
 }
 
 
-NodeSplitResult * splitNode(NodePtr node) {
+NodeSplitResult * splitNode(NodePtr * nodePtr) {
+    NodePtr node = *nodePtr;
     NodeSplitResult * splitResult = (NodeSplitResult *) malloc(sizeof(NodeSplitResult *));
     if(node->nPoints <= 3 || node->nNodes != 0) {
         fprintf(stderr, "The node you are trying to split has %d points and %d child nodes so it cannot be split.", node->nPoints, node->nNodes);
@@ -177,7 +178,7 @@ NodeSplitResult * splitNode(NodePtr node) {
     // }
     // free the current node and its children!
     // deleteBBox(node->bbox);
-    deleteNode(node);
+    deleteNode(nodePtr);
     free(pointXValues);
     free(pointYValues);
     

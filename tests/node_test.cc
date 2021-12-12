@@ -78,7 +78,7 @@ TEST(NodeTests,SplitsCorrectly) {
         result = addPointToNode(someNode, point);
     }
 
-    NodeSplitResult * splitResult = splitNode(someNode);
+    NodeSplitResult * splitResult = splitNode(&someNode);
     EXPECT_FALSE(splitResult->error);
     EXPECT_NE(splitResult->leftNode,(Node *)NULL);
     EXPECT_NE(splitResult->rightNode,(Node * )NULL);
@@ -100,4 +100,6 @@ TEST(NodeTests,SplitsCorrectly) {
     
     //Expect that the left and right bbox will have the same maxX (left) and minX (right)
     EXPECT_FLOAT_EQ(splitResult->leftNode->bbox->maxY,splitResult->rightNode->bbox->minY);
+    // Expec that the number of points in each node is roughly equal.
+    EXPECT_NEAR(splitResult->leftNode->nPoints,splitResult->rightNode->nPoints,2);
 }

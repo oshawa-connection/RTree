@@ -23,7 +23,7 @@ typedef struct NodeSplitResult {
 
 NodePtr createNode(BBox * bbox);
 
-void deleteNode(NodePtr node);
+void deleteNode(NodePtr * node);
 
 bool nodeIsLeaf(NodePtr node);
 
@@ -31,6 +31,6 @@ NodePtr getChildNodeAt(NodePtr node, int childNodeIndex);
 
 BBox * getNodeBBox(NodePtr node);
 
-NodeSplitResult * splitNode(NodePtr node);
+NodeSplitResult * splitNode(NodePtr * node);
 
 void destroyNodeSplitResult(NodeSplitResult * nodeSplitresult);
