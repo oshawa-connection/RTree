@@ -3,7 +3,7 @@
 #include "../headers/Node.h"
 #include <stdlib.h>
 #include "../headers/BBox.h"
-
+#include <glib.h>
 
 RTree * createRTree() {
     RTree * rtree = (RTree *)malloc(sizeof(RTree));

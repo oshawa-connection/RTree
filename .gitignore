@@ -4,7 +4,7 @@ bin/
 CMakeFiles/
 *.dSYM
 *.out
-*.cmake
+/*.cmake
 CMakeCache.txt
 Makefile
 *.md

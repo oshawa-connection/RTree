@@ -7,6 +7,9 @@
         "__locale": "cpp",
         "thread": "cpp",
         "ios": "cpp",
-        "ranges": "c"
+        "ranges": "c",
+        "__functional_03": "c",
+        "functional": "c",
+        "glib.h": "c"
     }
 }

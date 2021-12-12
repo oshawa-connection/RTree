@@ -49,6 +49,11 @@ gtest_discover_tests(all_tests)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
+find_package(Glib REQUIRED)
+include_directories(${Glib_INCLUDE_DIRS})
+set(LIBS ${LIBS} ${Glib_LIBRARIES})
+
+
 #main
 add_executable(
   rtree
@@ -59,3 +64,5 @@ add_executable(
   src/Point.c
 )
 
+target_link_libraries(rtree ${LIBS})
+message(${Glib_INCLUDE_DIRS})
