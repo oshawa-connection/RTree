@@ -195,7 +195,7 @@ bool splitNode(NodePtr node) {
         }
         
     }
-    fprintf(stdout,"LEFT: %d, RIGHT%d\n",leftPoints,rightPoints);
+    
     addSplitResultToNode(node,leftNode,rightNode);
 
     free(pointXValues);

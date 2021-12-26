@@ -67,7 +67,6 @@ NodePtr _rTreeTraverseToLeaf(RTreePtr rTree, Point * point) {
                 addNodeToEnlargenQueue(rTree,currentChild);
             }
         }
-        // TODO: And enlargen the bbox if enlargementArea > 0 in insert 
         currentNode = smallestEnlargementNode;  
     }
     
@@ -75,13 +74,22 @@ NodePtr _rTreeTraverseToLeaf(RTreePtr rTree, Point * point) {
 }
 
 
-
+void _enlargenAllNodes(RTreePtr rTree, Point * newPoint) {
+    NodePtr currentNode = NULL;
+    while ((currentNode = (NodePtr) g_queue_pop_head(rTree->nodeQueue))) {
+        BBox * bbox = getNodeBBox(currentNode);
+        BboxEnlargen(bbox,newPoint);
+    }
+    
+}
 
 /**
  * 
  * 
  * */
 void RTreeInsertPoint(RTreePtr rTree, Point * newPoint) {
+    g_queue_clear(rTree->nodeQueue);
+    
     NodePtr bestNode = _rTreeTraverseToLeaf(rTree,newPoint);
     if(addPointToNode(bestNode,newPoint) == false) {
         rTree->depth += 1;
@@ -95,7 +103,8 @@ void RTreeInsertPoint(RTreePtr rTree, Point * newPoint) {
             return RTreeInsertPoint(rTree, newPoint);
         }
     }
-
+    printf("LENGTH OF QUEUE IS %d\n",g_queue_get_length(rTree->nodeQueue));
+    _enlargenAllNodes(rTree,newPoint);
     //Now enlargen all in the queue, including the root node.
 }
 
