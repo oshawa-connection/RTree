@@ -186,7 +186,7 @@ bool splitNode(NodePtr node) {
     // now distribute points between two new nodes.
     for (int pointIndex = 0; pointIndex < node->nPoints; pointIndex ++) {
         Point * currentPoint = node->points[pointIndex];
-        if (BBoxContains(leftNode->bbox,currentPoint)) {
+        if (BBoxContainsPoint(leftNode->bbox,currentPoint)) {
             addPointToNode(leftNode,currentPoint);
             leftPoints += 1;
         } else {

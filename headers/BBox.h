@@ -1,5 +1,6 @@
 #pragma once
 #include "Point.h"
+#include "Polygon.h"
 #include <stdbool.h>
 typedef struct BBox{
     int id;
@@ -31,4 +32,6 @@ void BboxEnlargen(BBox * bbox, Point * point);
 
 void BboxSplit(BBox * bbox,BBox * newBBoxes);
 
-bool BBoxContains(BBox * bbox, Point * point);
+bool BBoxContainsPoint(BBox * bbox, Point * point);
+
+bool BBoxIntersectsPolygon(BBox * bbox, Polygon * polygon);

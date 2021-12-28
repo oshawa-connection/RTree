@@ -1,5 +1,5 @@
 #include "../headers/BBox.h"
-
+#include <stdlib.h>
 
 BBox * createBBox(int id,float minX, float minY, float maxX, float maxY) {
     BBox * myBBox = (BBox *)malloc(sizeof(BBox));
@@ -85,7 +85,7 @@ void BboxSplit(BBox * bbox, BBox * newBBoxes) {
 }
 
 
-bool BBoxContains(BBox * bbox, Point * point) {
+bool BBoxContainsPoint(BBox * bbox, Point * point) {
     if (bbox->minX > point->x) return false;
     if (bbox->minY > point->y) return false;
     if (bbox->maxX < point->x) return false;
