@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+// Used to prevent infinite recursion
 #define RTREE_MAX_DEPTH 100
 
 typedef struct RTree {
@@ -118,4 +119,3 @@ void _rTreeSearch(RTreePtr rTree, NodePtr queryNode) {
         
     // }
 }
-

@@ -12,3 +12,4 @@ Makefile
 *.a
 rtree
 all_tests
+pq

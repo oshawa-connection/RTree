@@ -25,4 +25,3 @@ void RTreeInsertPoint(RTreePtr rTree, Point * newPoint);
  * 
  * */
 void _rTreeSearch(RTreePtr rTree, NodePtr queryNode);
-

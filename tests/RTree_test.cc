@@ -24,7 +24,8 @@ TEST(RTreeTests, CanInsertWithASplit) {
         RTreeInsertPoint(rtree,pointToInsert);
     }
     // Point * pointToInsert = createPoint(1.0,1.0);
-    
+    int depth = getRTreeDepth(rtree);
+    printf("Depth of RTree is: %d\n",depth);
     deleteRTree(&rtree);
     // free(pointToInsert);
 }
