@@ -21,3 +21,14 @@ TEST(Point, CalculateDistanceBetweenNegativePoints) {
     double result = distanceBetweenPoints(pointOne,pointTwo);
     EXPECT_FLOAT_EQ(result,1.1);
 }
+
+
+
+
+
+TEST(Point, pointsAreEqual) {
+    Point * pointOne = createPoint(-1.1,0.0);
+    Point * pointTwo = createPoint(-1.1,0.0);
+    EXPECT_TRUE(pointsAreEqual(pointTwo,pointOne));
+    // EXPECT_FLOAT_EQ(result,1.1);
+}

@@ -75,11 +75,15 @@ TEST(NodeTests,SplitsCorrectly) {
     for(int i =0; i < MAX_POINTS_PER_NODE +5;i ++) {
         // memory leak
         Point * point = createPoint(1,(float)i);
+        // We overload the node so that it is ready to split.
         result = addPointToNode(someNode, point);
     }
 
     bool splitResult = splitNode(someNode);
+    //True if success, false if there was an error.
     EXPECT_TRUE(splitResult);
+    //We expect the split node (which is now a parent, not a leaf)
+    // to have 0 points itself.
     EXPECT_EQ(someNode->nPoints,0);
     
     EXPECT_EQ(someNode->nNodes,2);
@@ -102,4 +106,6 @@ TEST(NodeTests,SplitsCorrectly) {
     EXPECT_FLOAT_EQ(leftNode->bbox->maxY,rightNode->bbox->minY);
     // Expec that the number of points in each node is roughly equal.
     EXPECT_NEAR(leftNode->nPoints,rightNode->nPoints,2);
+    // The sum of both should be the original number of points.
+    EXPECT_EQ(leftNode->nPoints + rightNode->nPoints,MAX_POINTS_PER_NODE);
 }

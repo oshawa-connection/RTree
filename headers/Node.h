@@ -33,3 +33,11 @@ BBox * getNodeBBox(NodePtr node);
 bool splitNode(NodePtr node);
 
 void destroyNodeSplitResult(NodeSplitResult * nodeSplitresult);
+
+/**
+ * This checks if the bbox of the node encloses a point, 
+ * NOT if it contains the actual point itself.
+ * */
+bool nodeEnclosesPoint(NodePtr node, Point * point);
+
+bool nodeContainsPoint(NodePtr node, Point * point);

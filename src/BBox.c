@@ -87,7 +87,7 @@ bool BBoxContainsPoint(BBox * bbox, Point * point) {
 }
 
 bool BBoxIntersectsPolygon(BBox * bbox, Polygon * polygon) {
-    fprintf(stderr,"This method has not been implemented");    
+    fprintf(stderr,"BBoxIntersectsPolygon has not been implemented");    
     return false;
 }
 
@@ -102,5 +102,6 @@ faceDirection determineClosestFace(BBox * bbox, Point * point) {
 
 
 double bboxDistanceToPoint(BBox * bbox, Point * point) {
+    fprintf(stderr,"bboxDistanceToPoint has not been implemented yet");
     return 0.0;
 }

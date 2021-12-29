@@ -45,7 +45,7 @@
 //     RTree rTree = {1,5,&rootNode,NULL};
 
 //     Point myPoint = {1.25,1.25};
-//     Node * foundNode = _rTreeTraverseToLeaf(&rTree, &myPoint);
+//     Node * foundNode = _rTreeTraverseToLeafEnlargen(&rTree, &myPoint);
     
 //     char str[] = "My message here";
 

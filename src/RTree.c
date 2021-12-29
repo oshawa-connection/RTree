@@ -45,22 +45,25 @@ int getRTreeDepth(RTreePtr rtree) {
 }
 
 /** 
+ * Add node to queue. This could either be for searching or enlargening.
  * TODO: We need some way to stop duplicate items being added.
  * This could be done using a tree https://docs.gtk.org/glib/method.Tree.lookup.html
  * acting as a form of "Set".
  * Lookup would be O(log n)
  * Insertion is _apparently_ O(log n)?
  * */
-void addNodeToEnlargenQueue(RTreePtr rtree, NodePtr nodeToAdd) {
+void addNodeToQueue(RTreePtr rtree, NodePtr nodeToAdd) {
     g_queue_push_head(rtree->nodeQueue,nodeToAdd);
     // NodePtr myX = (NodePtr)g_queue_pop_head(myQueue);
 }
 
-
-// Go from RootNode to leaf.
-//at each level, select the node, L, whose MBR will require the minimum area enlargement
-//to cover E.mbr
-NodePtr _rTreeTraverseToLeaf(RTreePtr rTree, Point * point) {
+/**
+ * Go from RootNode to leaf.
+ * At each level, select the node, L, whose MBR will require the minimum area enlargement
+ * to cover E.mbr.
+ * At each level, there is only one best candidate.
+ * */
+NodePtr _rTreeTraverseToLeafEnlargen(RTreePtr rTree, Point * point) {
     NodePtr currentNode = rTree->rootNode;
     
     while (!(nodeIsLeaf(currentNode))) {
@@ -73,7 +76,7 @@ NodePtr _rTreeTraverseToLeaf(RTreePtr rTree, Point * point) {
             if (currentMin > enlargementArea) {
                 currentMin = enlargementArea;
                 smallestEnlargementNode = currentChild;
-                addNodeToEnlargenQueue(rTree,currentChild);
+                addNodeToQueue(rTree,currentChild);
             }
         }
         currentNode = smallestEnlargementNode;  
@@ -99,7 +102,7 @@ void _enlargenAllNodes(RTreePtr rTree, Point * newPoint) {
 void RTreeInsertPoint(RTreePtr rTree, Point * newPoint) {
     //g_queue_clear(rTree->nodeQueue);
     
-    NodePtr bestNode = _rTreeTraverseToLeaf(rTree,newPoint);
+    NodePtr bestNode = _rTreeTraverseToLeafEnlargen(rTree,newPoint);
     if(addPointToNode(bestNode,newPoint) == false) {
         rTree->depth += 1;
         if (rTree->depth > RTREE_MAX_DEPTH) {
@@ -126,4 +129,37 @@ void _rTreeSearch(RTreePtr rTree, NodePtr queryNode) {
     // for(int childNodeN =0; childNodeN < numberOfChildNodes;childNodeN ++) {
         
     // }
+}
+
+void _rtreeTraverseToLeafContains() {
+
+}
+
+
+bool RTreecontainsPoint(RTreePtr rTree, Point * point) {
+    assert(g_queue_is_empty(rTree->nodeQueue) == true);
+    addNodeToQueue(rTree,rTree->rootNode);
+    while(!g_queue_is_empty(rTree->nodeQueue)) {
+        // Todo: This should be wrapped up in a function.
+        NodePtr currentNode = (NodePtr)g_queue_pop_head(rTree->nodeQueue);
+        // If the node is a leaf, just search the points 
+        if (nodeIsLeaf(currentNode)) {
+            
+            if (nodeContainsPoint(currentNode,point)) {
+                
+            }
+            
+        } else { 
+            // else check its children.
+            int nodeCount = 0;
+            NodePtr currentChild = NULL;
+
+            while((currentChild = getChildNodeAt(currentNode,nodeCount++))) {
+                if (nodeEnclosesPoint(currentChild,point)) {
+                    addNodeToQueue(rTree,currentChild);
+                }
+            }
+        }
+    }
+    return false;
 }

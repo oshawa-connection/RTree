@@ -1,4 +1,5 @@
 #pragma once
+#include <stdbool.h>
 
 typedef struct Point{
     float x;
@@ -9,3 +10,5 @@ typedef struct Point{
 Point * createPoint(float x, float y);
 
 double distanceBetweenPoints(Point * point, Point * otherPoint);
+
+bool pointsAreEqual(Point * point, Point * otherPoint);

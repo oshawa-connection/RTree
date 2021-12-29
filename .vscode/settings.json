@@ -17,6 +17,7 @@
         "stack": "c",
         "complex": "c",
         "istream": "c",
-        "point.c": "cpp"
+        "point.c": "cpp",
+        "cfloat": "cpp"
     }
 }

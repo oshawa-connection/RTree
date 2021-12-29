@@ -27,5 +27,6 @@ TEST(RTreeTests, CanInsertWithASplit) {
     int depth = getRTreeDepth(rtree);
     printf("Depth of RTree is: %d\n",depth);
     deleteRTree(&rtree);
+    // TODO: ensure that all parent bboxes are larger than child bboxes.
     // free(pointToInsert);
 }
