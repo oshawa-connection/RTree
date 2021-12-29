@@ -1,5 +1,6 @@
 #include "../headers/BBox.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 BBox * createBBox(int id,float minX, float minY, float maxX, float maxY) {
     BBox * myBBox = (BBox *)malloc(sizeof(BBox));
@@ -77,18 +78,29 @@ void BboxEnlargen(BBox * bbox, Point * point) {
     }
 }
 
-/**
- * Split a bbox into two parts
- * */
-void BboxSplit(BBox * bbox, BBox * newBBoxes) {
-    
-}
-
-
 bool BBoxContainsPoint(BBox * bbox, Point * point) {
     if (bbox->minX > point->x) return false;
     if (bbox->minY > point->y) return false;
     if (bbox->maxX < point->x) return false;
     if (bbox->maxY < point->y) return false;
     return true;
+}
+
+bool BBoxIntersectsPolygon(BBox * bbox, Polygon * polygon) {
+    fprintf(stderr,"This method has not been implemented");    
+    return false;
+}
+
+
+
+typedef enum {TOP,BOTTOM,LEFT,RIGHT} faceDirection;
+
+faceDirection determineClosestFace(BBox * bbox, Point * point) {
+    fprintf(stderr,"determineClosestFace has not been implemented yet");
+    return TOP;
+}
+
+
+double bboxDistanceToPoint(BBox * bbox, Point * point) {
+    return 0.0;
 }

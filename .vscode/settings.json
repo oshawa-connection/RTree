@@ -16,6 +16,7 @@
         "queue": "c",
         "stack": "c",
         "complex": "c",
-        "istream": "c"
+        "istream": "c",
+        "point.c": "cpp"
     }
 }

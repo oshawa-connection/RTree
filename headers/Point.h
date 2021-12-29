@@ -7,3 +7,5 @@ typedef struct Point{
 
 // Todo: switch to double.
 Point * createPoint(float x, float y);
+
+double distanceBetweenPoints(Point * point, Point * otherPoint);

@@ -30,8 +30,6 @@ float BboxMinEnlargementArea(BBox * bbox, Point * point);
 
 void BboxEnlargen(BBox * bbox, Point * point);
 
-void BboxSplit(BBox * bbox,BBox * newBBoxes);
-
 bool BBoxContainsPoint(BBox * bbox, Point * point);
 
 bool BBoxIntersectsPolygon(BBox * bbox, Polygon * polygon);

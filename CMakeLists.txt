@@ -34,7 +34,7 @@ add_executable(
   src/Point.c
   tests/all_tests.cc
   tests/node_test.cc
-  
+  tests/point_tests.cc
 
 )
 

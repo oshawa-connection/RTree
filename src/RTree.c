@@ -7,6 +7,7 @@
 #include "../headers/Node.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include <assert.h>
 
 // Used to prevent infinite recursion
 #define RTREE_MAX_DEPTH 100
@@ -43,6 +44,13 @@ int getRTreeDepth(RTreePtr rtree) {
     return rtree->depth;
 }
 
+/** 
+ * TODO: We need some way to stop duplicate items being added.
+ * This could be done using a tree https://docs.gtk.org/glib/method.Tree.lookup.html
+ * acting as a form of "Set".
+ * Lookup would be O(log n)
+ * Insertion is _apparently_ O(log n)?
+ * */
 void addNodeToEnlargenQueue(RTreePtr rtree, NodePtr nodeToAdd) {
     g_queue_push_head(rtree->nodeQueue,nodeToAdd);
     // NodePtr myX = (NodePtr)g_queue_pop_head(myQueue);
@@ -81,7 +89,7 @@ void _enlargenAllNodes(RTreePtr rTree, Point * newPoint) {
         BBox * bbox = getNodeBBox(currentNode);
         BboxEnlargen(bbox,newPoint);
     }
-    
+    assert(g_queue_get_length(rTree->nodeQueue) == 0);
 }
 
 /**
@@ -89,7 +97,7 @@ void _enlargenAllNodes(RTreePtr rTree, Point * newPoint) {
  * 
  * */
 void RTreeInsertPoint(RTreePtr rTree, Point * newPoint) {
-    g_queue_clear(rTree->nodeQueue);
+    //g_queue_clear(rTree->nodeQueue);
     
     NodePtr bestNode = _rTreeTraverseToLeaf(rTree,newPoint);
     if(addPointToNode(bestNode,newPoint) == false) {

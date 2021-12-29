@@ -166,6 +166,7 @@ bool splitNode(NodePtr node) {
     Node * leftNode;
     Node * rightNode;
 
+    // Perhaps this section could be moved to the bbox.c itself?
     if (result == X_DIRECTION) {
         double medianX = caculateMediand(pointXValues, node->nPoints);
         BBox * leftbboxPtr = createBBox(0,node->bbox->minX,node->bbox->minY,medianX,node->bbox->maxY);
@@ -205,3 +206,7 @@ bool splitNode(NodePtr node) {
 }
 
 
+bool isCloseToQueryObject(Node * node, Point * queryObject) {
+    // node->bbox
+    return false;
+}
