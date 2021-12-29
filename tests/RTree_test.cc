@@ -30,3 +30,19 @@ TEST(RTreeTests, CanInsertWithASplit) {
     // TODO: ensure that all parent bboxes are larger than child bboxes.
     // free(pointToInsert);
 }
+
+TEST(RTreeTests, CanFindPoint) {
+    RTreePtr rtree = createRTree();
+    Point * pointToInsert;
+    for(int i =0; i<100;i++) {
+        //Memory leak but I don't care
+        pointToInsert = createPoint((float)i,(float)i);
+        RTreeInsertPoint(rtree,pointToInsert);
+    }
+    bool result = RTreecontainsPoint(rtree,pointToInsert);
+    Point * point = createPoint(50.0,50.0);
+    bool otherresult = RTreecontainsPoint(rtree,point);
+    EXPECT_TRUE(result);
+    EXPECT_TRUE(otherresult);
+}
+

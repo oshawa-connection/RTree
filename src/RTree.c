@@ -135,7 +135,11 @@ void _rtreeTraverseToLeafContains() {
 
 }
 
-
+/**
+ * Nodes can potentially overlap.
+ * TODO: switch to using a priority queue. 
+ * TODO: try to get bboxes to overlap.
+ * */
 bool RTreecontainsPoint(RTreePtr rTree, Point * point) {
     assert(g_queue_is_empty(rTree->nodeQueue) == true);
     addNodeToQueue(rTree,rTree->rootNode);
@@ -144,16 +148,16 @@ bool RTreecontainsPoint(RTreePtr rTree, Point * point) {
         NodePtr currentNode = (NodePtr)g_queue_pop_head(rTree->nodeQueue);
         // If the node is a leaf, just search the points 
         if (nodeIsLeaf(currentNode)) {
-            
             if (nodeContainsPoint(currentNode,point)) {
-                
+                // exit early, clearing queue as we don't need it anymore.
+                //TODO: wrap in function.
+                g_queue_clear(rTree->nodeQueue);
+                return true;
             }
-            
         } else { 
             // else check its children.
             int nodeCount = 0;
             NodePtr currentChild = NULL;
-
             while((currentChild = getChildNodeAt(currentNode,nodeCount++))) {
                 if (nodeEnclosesPoint(currentChild,point)) {
                     addNodeToQueue(rTree,currentChild);
