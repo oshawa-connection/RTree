@@ -23,6 +23,6 @@ TEST(BBoxTest, CalculatesDistanceToLine) {
     Point * point = createPoint(3,0);
     BBox * bbox = createBBox(0,2,2,4,4);
     double result = bboxDistanceToPoint(bbox,point);
-    EXPECT_FLOAT_EQ(1.0,result);
+    EXPECT_FLOAT_EQ(2.0,result);
 }
 
