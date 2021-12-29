@@ -35,7 +35,7 @@ add_executable(
   tests/all_tests.cc
   tests/node_test.cc
   tests/point_tests.cc
-
+  tests/bbox_tests.cc
 )
 
 target_link_libraries(

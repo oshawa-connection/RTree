@@ -10,6 +10,8 @@ typedef struct BBox{
     float maxY;
 } BBox;
 
+typedef enum {TOP,BOTTOM,LEFT,RIGHT,ERROR} faceDirection;
+
 // /**
 //  * 
 //  * */
@@ -33,3 +35,5 @@ void BboxEnlargen(BBox * bbox, Point * point);
 bool BBoxContainsPoint(BBox * bbox, Point * point);
 
 bool BBoxIntersectsPolygon(BBox * bbox, Polygon * polygon);
+
+double bboxDistanceToPoint(BBox * bbox, Point * point);

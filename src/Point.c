@@ -26,7 +26,7 @@ double distanceBetweenPoints(Point * point, Point * otherPoint) {
     // determine a
     double aSquared = calcDiff(point->x,otherPoint->x);
     double bSquared = calcDiff(point->y,otherPoint->y);
-    return sqrt(aSquared - bSquared);
+    return sqrt(aSquared + bSquared);
 }
 
 bool pointsAreEqual(Point * point, Point * otherPoint) {
