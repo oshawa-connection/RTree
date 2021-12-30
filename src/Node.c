@@ -145,6 +145,11 @@ void addSplitResultToNode(NodePtr node, Node * leftNode, Node * rightNode) {
     node->nextNodes[1] = rightNode;
 }
 
+/**
+ * TODO: When splitting, calculate the bounds of the other axis
+ * from the points assigned to that bbox. This will account for 
+ * cases where the new points aren't in the same X or Y.
+ * */
 bool splitNode(NodePtr node) {
     NodeSplitResult * splitResult = (NodeSplitResult *) malloc(sizeof(NodeSplitResult *));
     if(node->nPoints <= 3 || node->nNodes != 0) {

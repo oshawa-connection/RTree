@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <assert.h>
 
+
 // Used to prevent infinite recursion
 #define RTREE_MAX_DEPTH 100
 
@@ -117,7 +118,6 @@ void RTreeInsertPoint(RTreePtr rTree, Point * newPoint) {
     }
     printf("LENGTH OF QUEUE IS %d\n",g_queue_get_length(rTree->nodeQueue));
     _enlargenAllNodes(rTree,newPoint);
-    //Now enlargen all in the queue, including the root node.
 }
 
 
@@ -131,12 +131,9 @@ void _rTreeSearch(RTreePtr rTree, NodePtr queryNode) {
     // }
 }
 
-void _rtreeTraverseToLeafContains() {
-
-}
-
 /**
- * Nodes can potentially overlap.
+ * Nodes can potentially overlap, therefore it is not a simple case of just 
+ * navigating down to the single leaf node. All candidate leaves must be investigated.
  * TODO: switch to using a priority queue. 
  * TODO: try to get bboxes to overlap.
  * */
