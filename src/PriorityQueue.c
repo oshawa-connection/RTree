@@ -7,20 +7,20 @@
 #include <stdbool.h>
 
 // Node
-typedef struct node {
+typedef struct pqNode {
 	// This will probably have to change to be a bbox/ node pointer.
     double data;
  
     // Lower values indicate higher priority
     double priority;
  
-    struct node* next;
+    struct pqNode* next;
  
-} Node;
+} PQNode;
 
 // Function to Create A New Node
-Node* createPriorityQueue(double d, double p) {
-    Node* temp = (Node*)malloc(sizeof(Node));
+PQNode* createPriorityQueue(double d, double p) {
+    PQNode* temp = (PQNode*)malloc(sizeof(PQNode));
     temp->data = d;
     temp->priority = p;
     temp->next = NULL;
@@ -29,37 +29,37 @@ Node* createPriorityQueue(double d, double p) {
 }
  
 // Return the value at head
-double pqPeek(Node** head) {
+double pqPeek(PQNode** head) {
     return (*head)->data;
 }
  
 // Removes the element with the
 // highest priority form the list
-void pqPop(Node** head) {
-    Node* temp = *head;
+void pqPop(PQNode** head) {
+    PQNode* temp = *head;
     (*head) = (*head)->next;
     free(temp);
 	temp = NULL;
 }
  
 // Function to push according to priority
-void pqPush(Node** head, double dataValue, double priority) {
+void pqPush(PQNode** head, double dataValue, double priority) {
 	// Special case when pushing to empty queue.
 	if (*head == NULL) {
 		*head = createPriorityQueue(dataValue, priority);
 		return;
 	}
-    Node* start = (*head);
+    PQNode* start = (*head);
  
-    // Create new Node
-    Node* temp = createPriorityQueue(dataValue, priority);
+    // Create new PQNode
+    PQNode* temp = createPriorityQueue(dataValue, priority);
  
     // Special Case: The head of list has lesser
     // priority than new node. So insert new
     // node before head node and change head node.
     if ((*head)->priority > priority) {
  
-        // Insert New Node before head
+        // Insert New PQNode before head
         temp->next = *head;
         (*head) = temp;
     }
@@ -80,7 +80,7 @@ void pqPush(Node** head, double dataValue, double priority) {
 }
  
 // Function to check is list is empty
-bool pqIsEmpty(Node** head) {
+bool pqIsEmpty(PQNode** head) {
     return (*head) == NULL;
 }
 
@@ -88,7 +88,7 @@ bool pqIsEmpty(Node** head) {
 // // // Driver code
 // int main()
 // {
-// 	Node* pq = createPriorityQueue(1, 1);
+// 	PQNode* pq = createPriorityQueue(1, 1);
 // 	char * inputString = malloc(255 * sizeof(char));
 // 	while(1) {
 // 		printf(">");

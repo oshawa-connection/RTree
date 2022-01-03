@@ -32,6 +32,7 @@ add_executable(
   src/Node.c
   src/RTree.c
   src/Point.c
+  src/PriorityQueue.c
   tests/all_tests.cc
   tests/node_test.cc
   tests/point_tests.cc
@@ -62,6 +63,7 @@ add_executable(
   src/Node.c
   src/RTree.c
   src/Point.c
+  src/PriorityQueue.c
 )
 
 target_link_libraries(rtree ${LIBS})

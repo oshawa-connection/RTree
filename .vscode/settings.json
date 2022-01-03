@@ -18,6 +18,12 @@
         "complex": "c",
         "istream": "c",
         "point.c": "cpp",
-        "cfloat": "cpp"
+        "cfloat": "cpp",
+        "__config": "cpp",
+        "array": "c",
+        "string": "c",
+        "string_view": "c",
+        "vector": "c",
+        "priorityqueue.h": "c"
     }
 }

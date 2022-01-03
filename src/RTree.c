@@ -8,7 +8,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <assert.h>
-
+#include <stdint.h>
+#include "../headers/PriorityQueue.h"
 
 // Used to prevent infinite recursion
 #define RTREE_MAX_DEPTH 100
@@ -17,6 +18,7 @@ typedef struct RTree {
     int depth;
     NodePtr rootNode; 
     GQueue* nodeQueue;
+    PriorityQueuePtr priorityQueue;
 } RTree;
 
 
@@ -26,7 +28,8 @@ RTreePtr createRTree() {
     
     rtree->rootNode = createNode(bbox);
     rtree->nodeQueue = g_queue_new();
-    
+
+    rtree->priorityQueue = createPriorityQueue(2.0,2.0);
     return rtree;
 }
 
@@ -56,6 +59,11 @@ int getRTreeDepth(RTreePtr rtree) {
 void addNodeToQueue(RTreePtr rtree, NodePtr nodeToAdd) {
     g_queue_push_head(rtree->nodeQueue,nodeToAdd);
     // NodePtr myX = (NodePtr)g_queue_pop_head(myQueue);
+}
+
+
+NodePtr getNextNodeFromQueue(RTreePtr rTree) {
+    NodePtr currentNode = (NodePtr)g_queue_pop_head(rTree->nodeQueue);
 }
 
 /**
@@ -121,14 +129,35 @@ void RTreeInsertPoint(RTreePtr rTree, Point * newPoint) {
 }
 
 
+void findNodesWithinDistance(RTreePtr rTree, Point * queryPoint, double distanceLimit) {
+    // getNextNodeFromQueue
+    // if (nodeWithinDistance())
+}
+
 /**
  * 
  * */
-void _rTreeSearch(RTreePtr rTree, NodePtr queryNode) {
-    // int numberOfChildNodes = rTree->rootNode->nNodes;
-    // for(int childNodeN =0; childNodeN < numberOfChildNodes;childNodeN ++) {
-        
-    // }
+void _rTreeSearch(RTreePtr rTree, Point * queryPoint) {
+    
+    NodePtr rootNode = rTree->rootNode;
+    int i = 0;
+
+    if (!RTreecontainsPoint(rTree,queryPoint)) {
+        fprintf(stdout, "Query point does not exist in RTree");
+        return;
+    }
+
+    assert(g_queue_is_empty(rTree->nodeQueue) == true);
+    addNodeToQueue(rTree,rTree->rootNode);
+    while(!g_queue_is_empty(rTree->nodeQueue)) {
+        NodePtr currentNode = getNextNodeFromQueue(rTree);
+    
+    }
+
+
+    // initial query to grab bboxes nearby.
+    // bboxDistanceToPoint
+
 }
 
 /**
@@ -141,8 +170,7 @@ bool RTreecontainsPoint(RTreePtr rTree, Point * point) {
     assert(g_queue_is_empty(rTree->nodeQueue) == true);
     addNodeToQueue(rTree,rTree->rootNode);
     while(!g_queue_is_empty(rTree->nodeQueue)) {
-        // Todo: This should be wrapped up in a function.
-        NodePtr currentNode = (NodePtr)g_queue_pop_head(rTree->nodeQueue);
+        NodePtr currentNode = getNextNodeFromQueue(rTree);
         // If the node is a leaf, just search the points 
         if (nodeIsLeaf(currentNode)) {
             if (nodeContainsPoint(currentNode,point)) {
@@ -153,7 +181,7 @@ bool RTreecontainsPoint(RTreePtr rTree, Point * point) {
             }
         } else { 
             // else check its children.
-            int nodeCount = 0;
+            size_t nodeCount = 0;
             NodePtr currentChild = NULL;
             while((currentChild = getChildNodeAt(currentNode,nodeCount++))) {
                 if (nodeEnclosesPoint(currentChild,point)) {
@@ -164,3 +192,4 @@ bool RTreecontainsPoint(RTreePtr rTree, Point * point) {
     }
     return false;
 }
+

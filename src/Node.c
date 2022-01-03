@@ -8,8 +8,8 @@ typedef enum {X_DIRECTION,Y_DIRECTION} splitDirection;
 
 typedef struct Node {
     Point ** points;
-    int nPoints;
-    int nNodes;
+    size_t nPoints;
+    size_t nNodes;
     BBox * bbox;
     NodePtr * nextNodes;
 } Node;
@@ -44,7 +44,7 @@ bool nodeIsLeaf(Node * node) {
 
 
 
-NodePtr getChildNodeAt(NodePtr node, int childNodeIndex) {
+NodePtr getChildNodeAt(NodePtr node, size_t childNodeIndex) {
     if (node->nextNodes == NULL) {
         return NULL;
     }
@@ -159,8 +159,8 @@ bool splitNode(NodePtr node) {
     
     double * pointXValues = (double *) malloc(sizeof(double) * node->nPoints);
     double * pointYValues = (double *) malloc(sizeof(double) * node->nPoints);
-
-    for(int i =0;i < node->nPoints;i++) {
+    
+    for(size_t i =0;i < node->nPoints;i++) {
         pointXValues[i] = node->points[i]->x;
         pointYValues[i] = node->points[i]->y;
     }
@@ -229,4 +229,10 @@ bool nodeContainsPoint(NodePtr node, Point * point) {
         }
     }
     return false;
+}
+
+
+bool nodeWithinDistance(NodePtr node, Point * point, double distanceLimit) {
+    double distance = bboxDistanceToPoint(node->bbox,point);
+    return distance < distanceLimit;
 }

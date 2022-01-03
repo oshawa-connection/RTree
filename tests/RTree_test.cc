@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/RTree.c"
+#include "../headers/RTree.h"
 
 
 TEST(RTreeTests, CanCreate) {

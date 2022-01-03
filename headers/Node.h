@@ -7,7 +7,9 @@
 
 // Needed in header to allow testing
 # define MAX_POINTS_PER_NODE 10
-
+#if MAX_POINTS_PER_NODE >= SIZE_MAX
+    #error "MAX_POINTS_PER_NODE exceeds SIZE_MAX"
+#endif
 typedef struct Node * NodePtr;
 
 /**
@@ -26,7 +28,7 @@ void deleteNode(NodePtr * node);
 
 bool nodeIsLeaf(NodePtr node);
 
-NodePtr getChildNodeAt(NodePtr node, int childNodeIndex);
+NodePtr getChildNodeAt(NodePtr node, size_t childNodeIndex);
 
 BBox * getNodeBBox(NodePtr node);
 
@@ -41,3 +43,5 @@ void destroyNodeSplitResult(NodeSplitResult * nodeSplitresult);
 bool nodeEnclosesPoint(NodePtr node, Point * point);
 
 bool nodeContainsPoint(NodePtr node, Point * point);
+
+bool nodeWithinDistance(NodePtr node, Point * point, double distanceLimit);
