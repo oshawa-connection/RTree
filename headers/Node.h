@@ -30,6 +30,8 @@ bool nodeIsLeaf(NodePtr node);
 
 NodePtr getChildNodeAt(NodePtr node, size_t childNodeIndex);
 
+Point * getPointAt(NodePtr node, size_t pointIndex);
+
 BBox * getNodeBBox(NodePtr node);
 
 bool splitNode(NodePtr node);

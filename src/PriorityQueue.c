@@ -1,26 +1,27 @@
 // C code to implement Priority Queue
 // using Linked List
+#include "../headers/PriorityQueue.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
+// #include <ctype.h>
 #include <string.h>
 #include <stdbool.h>
-
+#include "../headers/Node.h"
 // Node
-typedef struct pqNode {
-	// This will probably have to change to be a bbox/ node pointer.
-    double data;
+typedef struct PQNode {
+	// TODO: consider making this void * 
+    NodePtr data;
  
     // Lower values indicate higher priority
     double priority;
  
-    struct pqNode* next;
+    struct PQNode* next;
  
 } PQNode;
 
 // Function to Create A New Node
-PQNode* createPriorityQueue(double d, double p) {
-    PQNode* temp = (PQNode*)malloc(sizeof(PQNode));
+PriorityQueuePtr createPriorityQueue(NodePtr d, double p) {
+    PriorityQueuePtr temp = (PriorityQueuePtr)malloc(sizeof(PQNode));
     temp->data = d;
     temp->priority = p;
     temp->next = NULL;
@@ -28,8 +29,12 @@ PQNode* createPriorityQueue(double d, double p) {
     return temp;
 }
  
+double pqPeekPriority(PQNode** head) {
+    return (*head)->priority;
+}
+
 // Return the value at head
-double pqPeek(PQNode** head) {
+NodePtr pqPeek(PQNode** head) {
     return (*head)->data;
 }
  
@@ -43,9 +48,10 @@ void pqPop(PQNode** head) {
 }
  
 // Function to push according to priority
-void pqPush(PQNode** head, double dataValue, double priority) {
+void pqPush(PQNode** head, NodePtr dataValue, double priority) {
 	// Special case when pushing to empty queue.
 	if (*head == NULL) {
+        // This might be slow. We can write a better implementation.
 		*head = createPriorityQueue(dataValue, priority);
 		return;
 	}
@@ -85,6 +91,30 @@ bool pqIsEmpty(PQNode** head) {
 }
 
 
+void pqClear(PQNode** head) {
+    while (!pqIsEmpty(head)) {
+        pqPop(head);
+    }
+}
+
+
+uint64_t pqGetLength(PQNode** head) {
+    if (*head == NULL) {
+        return 0;
+    }
+    uint64_t length = 1;
+    PQNode* currentNode = (*head)->next;
+    while(currentNode != NULL) {
+        currentNode = currentNode->next;
+        length += 1;
+    }
+    return length;
+}
+
+
+void doNothing() {
+
+}
 // // // Driver code
 // int main()
 // {

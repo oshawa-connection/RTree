@@ -30,13 +30,14 @@ add_executable(
   all_tests
   src/BBox.c 
   src/Node.c
+  src/PriorityQueue.c
   src/RTree.c
   src/Point.c
-  src/PriorityQueue.c
   tests/all_tests.cc
   tests/node_test.cc
   tests/point_tests.cc
   tests/bbox_tests.cc
+  tests/priority_queue_test.cc
 )
 
 target_link_libraries(

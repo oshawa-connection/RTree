@@ -54,6 +54,16 @@ NodePtr getChildNodeAt(NodePtr node, size_t childNodeIndex) {
     return node->nextNodes[childNodeIndex];
 }
 
+Point * getPointAt(NodePtr node, size_t pointIndex) {
+    if (node->points == NULL) {
+        return NULL;
+    }
+    if (pointIndex > node->nPoints) {
+        return NULL;
+    }
+    return node->points[pointIndex];
+}
+
 
 /**
  * TODO: Allow adding points when this is not a leaf node, 
@@ -80,7 +90,7 @@ BBox * getNodeBBox(NodePtr node) {
     return node->bbox;
 }
 
-int getChildNodeCount(NodePtr node) {
+size_t getChildNodeCount(NodePtr node) {
     return node->nNodes;
 }
 

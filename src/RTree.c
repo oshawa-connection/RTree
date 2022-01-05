@@ -29,7 +29,7 @@ RTreePtr createRTree() {
     rtree->rootNode = createNode(bbox);
     rtree->nodeQueue = g_queue_new();
 
-    rtree->priorityQueue = createPriorityQueue(2.0,2.0);
+    rtree->priorityQueue = NULL; // create a new one each time.
     return rtree;
 }
 
@@ -129,7 +129,20 @@ void RTreeInsertPoint(RTreePtr rTree, Point * newPoint) {
 }
 
 
-void findNodesWithinDistance(RTreePtr rTree, Point * queryPoint, double distanceLimit) {
+void findLeavesWithinDistance(RTreePtr rTree, Point * queryPoint, double distanceLimit) {
+    assert(g_queue_is_empty(rTree->nodeQueue) == true);
+
+    addNodeToQueue(rTree,rTree->rootNode);
+    // if the node is within the specified distance 
+        // if it is a leaf
+            //add it to the priority queue
+        // else 
+            // add its children to the regular node queue.
+    NodePtr currentNode = NULL;
+    while((currentNode = getNextNodeFromQueue(rTree))) {
+        nodeWithinDistance(currentNode,queryPoint,distanceLimit);
+    }
+
     // getNextNodeFromQueue
     // if (nodeWithinDistance())
 }
@@ -137,27 +150,40 @@ void findNodesWithinDistance(RTreePtr rTree, Point * queryPoint, double distance
 /**
  * 
  * */
-void _rTreeSearch(RTreePtr rTree, Point * queryPoint) {
-    
+NodePtr _rTreeSearch(RTreePtr rTree, Point * queryPoint) {
+    assert(pqIsEmpty(&rTree->priorityQueue) == true);
     NodePtr rootNode = rTree->rootNode;
-    int i = 0;
-
     if (!RTreecontainsPoint(rTree,queryPoint)) {
         fprintf(stdout, "Query point does not exist in RTree");
-        return;
+        return NULL;
     }
 
-    assert(g_queue_is_empty(rTree->nodeQueue) == true);
-    addNodeToQueue(rTree,rTree->rootNode);
-    while(!g_queue_is_empty(rTree->nodeQueue)) {
-        NodePtr currentNode = getNextNodeFromQueue(rTree);
     
+    // Set with initial priority of zero as there will only be one element.
+    pqPush(&rTree->priorityQueue,rTree->rootNode,0.0);
+    /** 
+     * TODO: this initial search distance could be calculated to a reasonable 
+     * initial guess based on the dimensions of the root node?
+     * */
+    findLeavesWithinDistance(rTree,queryPoint,5.0); //TODO: then add them to priority queue.
+    uint64_t length = 0;
+    
+    if (length == 0) {
+        // Then try again with a larger distance, up to a maximum number of tries / distance based on rootnode.
     }
+    while(!pqIsEmpty(&rTree->priorityQueue)) {
+        NodePtr currentNode = pqPeek(&rTree->priorityQueue);
+        Point * point = getPointAt(currentNode, 0);
+        double currentBestDistance = distanceBetweenPoints(point,queryPoint);
+        double nextNearestBBox = pqPeekPriority(&rTree->priorityQueue);
+        if (currentBestDistance > nextNearestBBox) {
+            //TODO: then continue searching.
+        } else {
+            return currentNode;
+        }
 
-
-    // initial query to grab bboxes nearby.
-    // bboxDistanceToPoint
-
+    }
+    return NULL;
 }
 
 /**

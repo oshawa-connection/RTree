@@ -24,7 +24,7 @@ void RTreeInsertPoint(RTreePtr rTree, Point * newPoint);
 /**
  * 
  * */
-void _rTreeSearch(RTreePtr rTree, Point * queryPoint);
+NodePtr _rTreeSearch(RTreePtr rTree, Point * queryPoint);
 
 
 bool RTreecontainsPoint(RTreePtr rTree, Point * point);
