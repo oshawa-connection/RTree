@@ -25,6 +25,9 @@
         "string_view": "c",
         "vector": "c",
         "priorityqueue.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "stdbool.h": "c",
+        "stdlib.h": "c",
+        "limits.h": "c"
     }
 }

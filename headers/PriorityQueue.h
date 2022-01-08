@@ -7,7 +7,9 @@ typedef struct PQNode * PriorityQueuePtr;
 
 // Return the value at head
 NodePtr pqPeek(PriorityQueuePtr* head);
-
+/**
+ * If the queue is empty, this returns DBL_MAX.
+ * */
 double pqPeekPriority(PriorityQueuePtr* head);
 
 // Removes the element with the

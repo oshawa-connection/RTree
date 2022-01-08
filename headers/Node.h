@@ -46,4 +46,10 @@ bool nodeEnclosesPoint(NodePtr node, Point * point);
 
 bool nodeContainsPoint(NodePtr node, Point * point);
 
+
+/**
+ * Deprecated: use distNodeToPoint instead.
+ * */
 bool nodeWithinDistance(NodePtr node, Point * point, double distanceLimit);
+
+double distNodeToPoint(NodePtr node, Point * point);

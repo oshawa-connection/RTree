@@ -64,6 +64,7 @@ void addNodeToQueue(RTreePtr rtree, NodePtr nodeToAdd) {
 
 NodePtr getNextNodeFromQueue(RTreePtr rTree) {
     NodePtr currentNode = (NodePtr)g_queue_pop_head(rTree->nodeQueue);
+    return currentNode;
 }
 
 /**
@@ -74,7 +75,8 @@ NodePtr getNextNodeFromQueue(RTreePtr rTree) {
  * */
 NodePtr _rTreeTraverseToLeafEnlargen(RTreePtr rTree, Point * point) {
     NodePtr currentNode = rTree->rootNode;
-    
+    // This ensures that the root node also gets enlargened.
+    addNodeToQueue(rTree,currentNode); 
     while (!(nodeIsLeaf(currentNode))) {
         float currentMin = FLT_MAX;
         NodePtr smallestEnlargementNode = NULL;
@@ -114,7 +116,7 @@ void RTreeInsertPoint(RTreePtr rTree, Point * newPoint) {
     NodePtr bestNode = _rTreeTraverseToLeafEnlargen(rTree,newPoint);
     if(addPointToNode(bestNode,newPoint) == false) {
         rTree->depth += 1;
-        if (rTree->depth > RTREE_MAX_DEPTH) {
+        if (rTree->depth > RTREE_MAX_DEPTH || rTree->depth < 0) {
             fprintf(stderr,"RTree is exceeding maximum depth, exiting\n");
             exit(1);
         }
@@ -124,7 +126,8 @@ void RTreeInsertPoint(RTreePtr rTree, Point * newPoint) {
             return RTreeInsertPoint(rTree, newPoint);
         }
     }
-    printf("LENGTH OF QUEUE IS %d\n",g_queue_get_length(rTree->nodeQueue));
+
+    // printf("LENGTH OF QUEUE IS %d\n",g_queue_get_length(rTree->nodeQueue));
     _enlargenAllNodes(rTree,newPoint);
 }
 
@@ -137,21 +140,32 @@ void findLeavesWithinDistance(RTreePtr rTree, Point * queryPoint, double distanc
         // if it is a leaf
             //add it to the priority queue
         // else 
-            // add its children to the regular node queue.
+            // add its children to the regular node queue to be searched.
     NodePtr currentNode = NULL;
-    while((currentNode = getNextNodeFromQueue(rTree))) {
-        nodeWithinDistance(currentNode,queryPoint,distanceLimit);
+    while((currentNode = getNextNodeFromQueue(rTree)) != NULL) {
+        double currentDistance = distNodeToPoint(currentNode, queryPoint);
+        if (currentDistance < distanceLimit) {
+            if (nodeIsLeaf(currentNode)) {
+                pqPush(&rTree->priorityQueue,currentNode,currentDistance);
+            } else {
+                size_t nodeIndex = 0;
+                NodePtr currentChild =NULL;
+                while ((currentChild = getChildNodeAt(currentNode,nodeIndex)) != NULL)
+                {
+                    addNodeToQueue(rTree,currentChild);
+                    nodeIndex +=1;
+                }
+            }
+        }
     }
-
-    // getNextNodeFromQueue
-    // if (nodeWithinDistance())
 }
 
 /**
  * 
  * */
-NodePtr _rTreeSearch(RTreePtr rTree, Point * queryPoint) {
+Point * RTreeFindNearestNeighbour(RTreePtr rTree, Point * queryPoint) {
     assert(pqIsEmpty(&rTree->priorityQueue) == true);
+    assert(pqGetLength(&rTree->priorityQueue) == 0);
     NodePtr rootNode = rTree->rootNode;
     if (!RTreecontainsPoint(rTree,queryPoint)) {
         fprintf(stdout, "Query point does not exist in RTree");
@@ -160,28 +174,32 @@ NodePtr _rTreeSearch(RTreePtr rTree, Point * queryPoint) {
 
     
     // Set with initial priority of zero as there will only be one element.
-    pqPush(&rTree->priorityQueue,rTree->rootNode,0.0);
+    // pqPush(&rTree->priorityQueue,rTree->rootNode,0.0);
     /** 
      * TODO: this initial search distance could be calculated to a reasonable 
      * initial guess based on the dimensions of the root node?
      * */
     findLeavesWithinDistance(rTree,queryPoint,5.0); //TODO: then add them to priority queue.
-    uint64_t length = 0;
+    uint64_t length = pqGetLength(&rTree->priorityQueue);
     
     if (length == 0) {
         // Then try again with a larger distance, up to a maximum number of tries / distance based on rootnode.
     }
     while(!pqIsEmpty(&rTree->priorityQueue)) {
         NodePtr currentNode = pqPeek(&rTree->priorityQueue);
-        Point * point = getPointAt(currentNode, 0);
-        double currentBestDistance = distanceBetweenPoints(point,queryPoint);
-        double nextNearestBBox = pqPeekPriority(&rTree->priorityQueue);
-        if (currentBestDistance > nextNearestBBox) {
-            //TODO: then continue searching.
-        } else {
-            return currentNode;
-        }
+        pqPop(&rTree->priorityQueue);
 
+        Point * currentPoint = NULL;
+        size_t pointIndex = 0;
+        while((currentPoint = getPointAt(currentNode,pointIndex)) != NULL) {
+            double currentBestDistance = distanceBetweenPoints(currentPoint,queryPoint);
+            double nextNearestBBox = pqPeekPriority(&rTree->priorityQueue);
+            if (currentBestDistance < nextNearestBBox) {
+                return currentPoint;
+            }
+            pointIndex +=1;
+        }
+        
     }
     return NULL;
 }

@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../headers/RTree.h"
+#include "../src/RTree.c"
 
 
 TEST(RTreeTests, CanCreate) {
@@ -16,13 +16,22 @@ TEST(RTreeTests, CanInsertWithoutSplit) {
     free(pointToInsert);
 }
 
+/**
+ * RTreeTests.CanInsertWithASplit sometimes gives a "RTree is exceeding maximum depth, exiting"
+ * Could this be something to do with floating point precision?
+ * 
+ * */
 TEST(RTreeTests, CanInsertWithASplit) {
     RTreePtr rtree = createRTree();
     for(int i =0; i<100;i++) {
         //Memory leak but I don't care
-        Point * pointToInsert = createPoint(1.0,(float)i);
+        Point * pointToInsert = createPoint((float)i,(float)i);
         RTreeInsertPoint(rtree,pointToInsert);
     }
+    BBox * rootBBox = getNodeBBox(rtree->rootNode);
+    EXPECT_FLOAT_EQ(rootBBox->maxX,(double)99);
+    EXPECT_FLOAT_EQ(rootBBox->minX,(double)0);
+    EXPECT_FLOAT_EQ(rootBBox->maxY,(double)99);
     // Point * pointToInsert = createPoint(1.0,1.0);
     int depth = getRTreeDepth(rtree);
     printf("Depth of RTree is: %d\n",depth);
@@ -39,6 +48,9 @@ TEST(RTreeTests, CanFindPoint) {
         pointToInsert = createPoint((float)i,(float)i);
         RTreeInsertPoint(rtree,pointToInsert);
     }
+
+     
+
     bool result = RTreecontainsPoint(rtree,pointToInsert);
     Point * point = createPoint(50.0,50.0);
     bool otherresult = RTreecontainsPoint(rtree,point);
@@ -46,3 +58,14 @@ TEST(RTreeTests, CanFindPoint) {
     EXPECT_TRUE(otherresult);
 }
 
+TEST(RTreeTests, CanSearchForNearestNeighbour) {
+    RTreePtr rtree = createRTree();
+    Point * pointToInsert;
+    for(int i =0; i<100;i++) {
+        //Memory leak but I don't care
+        pointToInsert = createPoint((float)i,(float)i);
+        RTreeInsertPoint(rtree,pointToInsert);
+    }
+    Point * nearestPoint = RTreeFindNearestNeighbour(rtree, pointToInsert);
+    
+}

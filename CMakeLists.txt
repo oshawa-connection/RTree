@@ -35,6 +35,7 @@ add_executable(
   src/Point.c
   tests/all_tests.cc
   tests/node_test.cc
+  tests/RTree_test.cc
   tests/point_tests.cc
   tests/bbox_tests.cc
   tests/priority_queue_test.cc

@@ -163,7 +163,7 @@ void addSplitResultToNode(NodePtr node, Node * leftNode, Node * rightNode) {
 bool splitNode(NodePtr node) {
     NodeSplitResult * splitResult = (NodeSplitResult *) malloc(sizeof(NodeSplitResult *));
     if(node->nPoints <= 3 || node->nNodes != 0) {
-        fprintf(stderr, "The node you are trying to split has %d points and %d child nodes so it cannot be split.", node->nPoints, node->nNodes);
+        fprintf(stderr, "The node you are trying to split has %zu points and %zu child nodes so it cannot be split.", node->nPoints, node->nNodes);
         return false;
     }
     
@@ -245,4 +245,8 @@ bool nodeContainsPoint(NodePtr node, Point * point) {
 bool nodeWithinDistance(NodePtr node, Point * point, double distanceLimit) {
     double distance = bboxDistanceToPoint(node->bbox,point);
     return distance < distanceLimit;
+}
+
+double distNodeToPoint(NodePtr node, Point * point) {
+    return bboxDistanceToPoint(node->bbox,point);
 }

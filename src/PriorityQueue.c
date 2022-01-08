@@ -3,6 +3,7 @@
 #include "../headers/PriorityQueue.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <float.h>
 // #include <ctype.h>
 #include <string.h>
 #include <stdbool.h>
@@ -30,6 +31,9 @@ PriorityQueuePtr createPriorityQueue(NodePtr d, double p) {
 }
  
 double pqPeekPriority(PQNode** head) {
+    if (*head == NULL) {
+        return DBL_MAX;
+    }
     return (*head)->priority;
 }
 
