@@ -48,9 +48,6 @@ TEST(RTreeTests, CanFindPoint) {
         pointToInsert = createPoint((float)i,(float)i);
         RTreeInsertPoint(rtree,pointToInsert);
     }
-
-     
-
     bool result = RTreecontainsPoint(rtree,pointToInsert);
     Point * point = createPoint(50.0,50.0);
     bool otherresult = RTreecontainsPoint(rtree,point);
@@ -68,6 +65,30 @@ TEST(RTreeTests, CanSearchForNearestNeighbour) {
         RTreeInsertPoint(rtree,pointToInsert);
     }
     Point * nearestPoint = RTreeFindNearestNeighbour(rtree, pointToInsert);
+    EXPECT_FLOAT_EQ(nearestPoint->x,(float)98);
+    EXPECT_FLOAT_EQ(nearestPoint->x,(float)98);
+}
+
+TEST(RTreeTests, CanInsertLotsOfPoints) {
+    RTreePtr rtree = createRTree();
+    Point * pointToInsert;
+    for(int i =0; i<1000;i++) {
+        //Memory leak but I don't care
+        pointToInsert = createPoint((float)i,(float)i);
+        RTreeInsertPoint(rtree,pointToInsert);
+    }
+}
+
+TEST(RTreeTests,CanSearchMultipleTimes) {
+    RTreePtr rtree = createRTree();
+    Point * pointToInsert;
+    for(int i =0; i<100;i++) {
+        //Memory leak but I don't care
+        pointToInsert = createPoint((float)i,(float)i);
+        RTreeInsertPoint(rtree,pointToInsert);
+    }
+    Point * nearestPoint = RTreeFindNearestNeighbour(rtree, pointToInsert);
+    Point * nearestPointTwo = RTreeFindNearestNeighbour(rtree, pointToInsert);
     EXPECT_FLOAT_EQ(nearestPoint->x,(float)98);
     EXPECT_FLOAT_EQ(nearestPoint->x,(float)98);
 }

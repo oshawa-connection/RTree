@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <float.h>
 
 typedef enum {X_DIRECTION,Y_DIRECTION} splitDirection;
 
@@ -105,6 +106,27 @@ void destroyNodeSplitResult(NodeSplitResult * nodeSplitresult) {
     free(nodeSplitresult);
 }
 
+double calculateMinimumd(double * dvalues, size_t numberOfValues) {
+    double currentMin = DBL_MAX;
+    for(int i=0;i<numberOfValues;i++) {
+        if (dvalues[i] < currentMin) {
+            currentMin = dvalues[i];
+        }
+    }
+    return currentMin;
+}
+
+
+double calculateMaximumd(double * dvalues, size_t numberOfValues) {
+    double currentMax = DBL_MIN;
+    for(int i=0;i<numberOfValues;i++) {
+        if (dvalues[i] > currentMax) {
+            currentMax = dvalues[i];
+        }
+    }
+    return currentMax;
+}
+
 double calculateMeand(double * dvalues, size_t numberOfValues) {
     double sum;
     for(int i=0;i<numberOfValues;i++) {
@@ -182,6 +204,7 @@ bool splitNode(NodePtr node) {
     Node * leftNode;
     Node * rightNode;
 
+
     // TODO: Perhaps this section could be moved to the bbox.c itself?
     if (result == X_DIRECTION) {
         double medianX = caculateMediand(pointXValues, node->nPoints);
@@ -197,18 +220,13 @@ bool splitNode(NodePtr node) {
         rightNode = createNode(rightbboxPtr);
     }
     
-    int leftPoints =0;
-    int rightPoints = 0;
-
     // now distribute points between two new nodes.
     for (int pointIndex = 0; pointIndex < node->nPoints; pointIndex ++) {
         Point * currentPoint = node->points[pointIndex];
         if (BBoxContainsPoint(leftNode->bbox,currentPoint)) {
             addPointToNode(leftNode,currentPoint);
-            leftPoints += 1;
         } else {
             addPointToNode(rightNode,currentPoint);
-            rightPoints +=1;
         }
         
     }

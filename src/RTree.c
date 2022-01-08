@@ -12,7 +12,7 @@
 #include "../headers/PriorityQueue.h"
 
 // Used to prevent infinite recursion
-#define RTREE_MAX_DEPTH 100
+#define RTREE_MAX_DEPTH 10000
 
 typedef struct RTree {
     int depth;
@@ -110,9 +110,7 @@ void _enlargenAllNodes(RTreePtr rTree, Point * newPoint) {
  * 
  * 
  * */
-void RTreeInsertPoint(RTreePtr rTree, Point * newPoint) {
-    //g_queue_clear(rTree->nodeQueue);
-    
+void RTreeInsertPoint(RTreePtr rTree, Point * newPoint) {    
     NodePtr bestNode = _rTreeTraverseToLeafEnlargen(rTree,newPoint);
     if(addPointToNode(bestNode,newPoint) == false) {
         rTree->depth += 1;
@@ -204,6 +202,7 @@ Point * RTreeFindNearestNeighbour(RTreePtr rTree, Point * queryPoint) {
         }
         // Then we can't do any better by checking other bboxes so stop.
         if (bestPointDistance <= nextNearestBBox) {
+            pqClear(&rTree->priorityQueue);
             return currentBestPoint;
         }
         
