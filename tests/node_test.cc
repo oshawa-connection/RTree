@@ -74,7 +74,7 @@ TEST(NodeTests,SplitsCorrectly) {
     //to split that in half
     for(int i =0; i < MAX_POINTS_PER_NODE +5;i ++) {
         // memory leak
-        Point * point = createPoint(1,(float)i);
+        Point * point = createPoint((float)i,(float)i);
         // We overload the node so that it is ready to split.
         result = addPointToNode(someNode, point);
     }
@@ -85,7 +85,7 @@ TEST(NodeTests,SplitsCorrectly) {
     //We expect the split node (which is now a parent, not a leaf)
     // to have 0 points itself.
     EXPECT_EQ(someNode->nPoints,0);
-    
+    // we expect the split node to now have 2 children.
     EXPECT_EQ(someNode->nNodes,2);
     EXPECT_NE(someNode->nextNodes, (Node **) NULL);
     
@@ -108,4 +108,15 @@ TEST(NodeTests,SplitsCorrectly) {
     EXPECT_NEAR(leftNode->nPoints,rightNode->nPoints,2);
     // The sum of both should be the original number of points.
     EXPECT_EQ(leftNode->nPoints + rightNode->nPoints,MAX_POINTS_PER_NODE);
+}
+
+TEST(NodeTests,CanGetPointAt) {
+    BBox * bbox = createBBox(0,0,1,0,1);
+    NodePtr node = createNode(bbox);
+    Point * firstPoint = createPoint(1,1);
+    addPointToNode(node,firstPoint);
+    Point * result = getPointAt(node,0);
+    Point * resulttwo = getPointAt(node,1);
+    EXPECT_NE(result,(Point *)NULL);
+    EXPECT_EQ(resulttwo, (Point * ) NULL);
 }

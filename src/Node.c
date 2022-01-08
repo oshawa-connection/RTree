@@ -58,7 +58,8 @@ Point * getPointAt(NodePtr node, size_t pointIndex) {
     if (node->points == NULL) {
         return NULL;
     }
-    if (pointIndex > node->nPoints) {
+    // Remember that arrays are 0 indexed
+    if (pointIndex >= node->nPoints) {
         return NULL;
     }
     return node->points[pointIndex];
@@ -161,7 +162,7 @@ void addSplitResultToNode(NodePtr node, Node * leftNode, Node * rightNode) {
  * cases where the new points aren't in the same X or Y.
  * */
 bool splitNode(NodePtr node) {
-    NodeSplitResult * splitResult = (NodeSplitResult *) malloc(sizeof(NodeSplitResult *));
+    // NodeSplitResult * splitResult = (NodeSplitResult *) malloc(sizeof(NodeSplitResult *));
     if(node->nPoints <= 3 || node->nNodes != 0) {
         fprintf(stderr, "The node you are trying to split has %zu points and %zu child nodes so it cannot be split.", node->nPoints, node->nNodes);
         return false;

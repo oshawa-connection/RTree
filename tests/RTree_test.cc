@@ -58,6 +58,7 @@ TEST(RTreeTests, CanFindPoint) {
     EXPECT_TRUE(otherresult);
 }
 
+// TODO: this sometimes results in a (Address boundary error), but not always..
 TEST(RTreeTests, CanSearchForNearestNeighbour) {
     RTreePtr rtree = createRTree();
     Point * pointToInsert;
@@ -67,5 +68,6 @@ TEST(RTreeTests, CanSearchForNearestNeighbour) {
         RTreeInsertPoint(rtree,pointToInsert);
     }
     Point * nearestPoint = RTreeFindNearestNeighbour(rtree, pointToInsert);
-    
+    EXPECT_FLOAT_EQ(nearestPoint->x,(float)98);
+    EXPECT_FLOAT_EQ(nearestPoint->x,(float)98);
 }

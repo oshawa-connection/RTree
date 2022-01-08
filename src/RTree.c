@@ -117,7 +117,7 @@ void RTreeInsertPoint(RTreePtr rTree, Point * newPoint) {
     if(addPointToNode(bestNode,newPoint) == false) {
         rTree->depth += 1;
         if (rTree->depth > RTREE_MAX_DEPTH || rTree->depth < 0) {
-            fprintf(stderr,"RTree is exceeding maximum depth, exiting\n");
+            fprintf(stderr,"RTree exceeded maximum depth while trying to insert a point at %f %f, exiting\n",newPoint->x,newPoint->y);
             exit(1);
         }
         if(splitNode(bestNode) == false) {
@@ -172,7 +172,6 @@ Point * RTreeFindNearestNeighbour(RTreePtr rTree, Point * queryPoint) {
         return NULL;
     }
 
-    
     // Set with initial priority of zero as there will only be one element.
     // pqPush(&rTree->priorityQueue,rTree->rootNode,0.0);
     /** 
@@ -185,22 +184,31 @@ Point * RTreeFindNearestNeighbour(RTreePtr rTree, Point * queryPoint) {
     if (length == 0) {
         // Then try again with a larger distance, up to a maximum number of tries / distance based on rootnode.
     }
+    double bestPointDistance = DBL_MAX;
+    Point * currentBestPoint = NULL;
     while(!pqIsEmpty(&rTree->priorityQueue)) {
         NodePtr currentNode = pqPeek(&rTree->priorityQueue);
         pqPop(&rTree->priorityQueue);
-
         Point * currentPoint = NULL;
         size_t pointIndex = 0;
+        double nextNearestBBox = pqPeekPriority(&rTree->priorityQueue);
+
         while((currentPoint = getPointAt(currentNode,pointIndex)) != NULL) {
-            double currentBestDistance = distanceBetweenPoints(currentPoint,queryPoint);
-            double nextNearestBBox = pqPeekPriority(&rTree->priorityQueue);
-            if (currentBestDistance < nextNearestBBox) {
-                return currentPoint;
+            double pointDistance = distanceBetweenPoints(currentPoint,queryPoint);
+            //check that we aren't just comparing the point with itself.
+            if (currentPoint != queryPoint && pointDistance < bestPointDistance) {
+                currentBestPoint = currentPoint;
+                bestPointDistance = pointDistance;
             }
-            pointIndex +=1;
+            pointIndex += 1;
+        }
+        // Then we can't do any better by checking other bboxes so stop.
+        if (bestPointDistance <= nextNearestBBox) {
+            return currentBestPoint;
         }
         
     }
+    // If we reach here, we've searched through all the points without finding a good candidate.
     return NULL;
 }
 
