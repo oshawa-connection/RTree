@@ -6,6 +6,8 @@
 #include <getopt.h>
 #include "../headers/RTree.h"
 #include <time.h>
+#include <float.h>
+#include <assert.h>
 
 int main(int argc, char **argv) {
     clock_t start, end;
@@ -30,13 +32,25 @@ int main(int argc, char **argv) {
     start = clock();
     for(uint64_t i = 0;i < NUMBER_OF_POINTS; i++) {
         Point * pointToFind = points[i];
+        bool pointFound = false;
         for (uint64_t j = 0; j < NUMBER_OF_POINTS; j++) {
             Point * currentPoint = points[j];
             if (pointsAreEqual(pointToFind,currentPoint)) {
+                pointFound = true;
                 break;
             }
         }
-        // RTreeFindNearestNeighbour(rtree,points[i]);
+        assert(pointFound == true);
+        double currentMin = DBL_MAX;
+        Point * bestPoint = NULL;
+        for (uint64_t j = 0; j < NUMBER_OF_POINTS; j++) {
+            Point * currentPoint = points[j];
+            double currentDistance = distanceBetweenPoints(currentPoint,pointToFind);
+            if (currentDistance < currentMin) {
+                bestPoint = currentPoint;
+                currentMin = currentDistance;
+            }
+        }
     }
     end = clock();
     cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;

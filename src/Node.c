@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
+#include <glib.h>
 
 typedef enum {X_DIRECTION,Y_DIRECTION} splitDirection;
 
@@ -106,22 +107,33 @@ void destroyNodeSplitResult(NodeSplitResult * nodeSplitresult) {
     free(nodeSplitresult);
 }
 
-double calculateMinimumd(double * dvalues, size_t numberOfValues) {
+double calculateMinimumd(GList * pointList, bool y) {
     double currentMin = DBL_MAX;
-    for(int i=0;i<numberOfValues;i++) {
-        if (dvalues[i] < currentMin) {
-            currentMin = dvalues[i];
+    size_t numberOfValues = g_list_length(pointList);
+    for(size_t i=0;i<numberOfValues;i++) {
+        Point * currentPoint =(Point *) g_list_nth_data(pointList,i);
+        double currentValue = currentPoint->x;
+        if (y) {
+            currentValue = currentPoint->y;
+        } 
+        if (currentValue < currentMin) {
+            currentMin = currentValue;
         }
     }
     return currentMin;
 }
 
-
-double calculateMaximumd(double * dvalues, size_t numberOfValues) {
+double calculateMaximumd(GList * pointList, bool y) {
     double currentMax = DBL_MIN;
-    for(int i=0;i<numberOfValues;i++) {
-        if (dvalues[i] > currentMax) {
-            currentMax = dvalues[i];
+    size_t numberOfValues = g_list_length(pointList);
+    for(size_t i=0;i<numberOfValues;i++) {
+        Point * currentPoint =(Point *) g_list_nth_data(pointList,i);
+        double currentValue = currentPoint->x;
+        if (y) {
+            currentValue = currentPoint->y;
+        } 
+        if (currentValue > currentMax) {
+            currentMax = currentValue;
         }
     }
     return currentMax;
@@ -203,39 +215,84 @@ bool splitNode(NodePtr node) {
 
     Node * leftNode;
     Node * rightNode;
-
-
+    GList * leftNodeValues = NULL;
+    GList * rightNodeValues = NULL;
+    BBox * leftbboxPtr;
+    BBox * rightbboxPtr;
     // TODO: Perhaps this section could be moved to the bbox.c itself?
     if (result == X_DIRECTION) {
         double medianX = caculateMediand(pointXValues, node->nPoints);
-        BBox * leftbboxPtr = createBBox(0,node->bbox->minX,node->bbox->minY,medianX,node->bbox->maxY);
-        BBox * rightbboxPtr = createBBox(0,medianX,node->bbox->minY,node->bbox->maxX,node->bbox->maxY);
+
+        for (int pointIndex = 0; pointIndex < node->nPoints; pointIndex ++) {
+            Point * currentPoint = node->points[pointIndex];
+            if (currentPoint->x <= medianX) {
+                leftNodeValues = g_list_append(leftNodeValues,currentPoint);
+            } else {
+                rightNodeValues = g_list_append(rightNodeValues,currentPoint);
+            }
+        }
+        
+        double minXLeft = calculateMinimumd(leftNodeValues,false);
+        double minYLeft = calculateMinimumd(leftNodeValues,true);
+        double maxYLeft = calculateMaximumd(leftNodeValues,true);
+
+        double maxXRight = calculateMaximumd(rightNodeValues,false); 
+        double minYRight = calculateMinimumd(rightNodeValues,true);
+        double maxYRight = calculateMaximumd(rightNodeValues,true); 
+
+        leftbboxPtr = createBBox(0,minXLeft,minYLeft,medianX,maxYLeft);
+        rightbboxPtr = createBBox(0,medianX,minYRight,maxXRight,maxYRight);
+
         leftNode = createNode(leftbboxPtr);
         rightNode = createNode(rightbboxPtr);
     } else {
         double medianY = caculateMediand(pointYValues, node->nPoints);
-        BBox * leftbboxPtr = createBBox(0,node->bbox->minX,node->bbox->minY,node->bbox->maxX,medianY);
-        BBox * rightbboxPtr = createBBox(0,node->bbox->minX,medianY,node->bbox->maxX,node->bbox->maxY);
+
+        for (int pointIndex = 0; pointIndex < node->nPoints; pointIndex ++) {
+            Point * currentPoint = node->points[pointIndex];
+            if (currentPoint->y <= medianY) {
+                leftNodeValues = g_list_append(leftNodeValues,currentPoint);
+            } else {
+                rightNodeValues = g_list_append(rightNodeValues,currentPoint);
+            }
+        }
+
+        double minXLeft = calculateMinimumd(leftNodeValues,false);
+        double minYLeft = calculateMinimumd(leftNodeValues,true);
+        double maxXLeft = calculateMaximumd(leftNodeValues,false);
+
+        double minXRight = calculateMinimumd(rightNodeValues,false);
+        double maxXRight = calculateMaximumd(rightNodeValues,false); 
+        double maxYRight = calculateMaximumd(rightNodeValues,true); 
+
+        leftbboxPtr = createBBox(0,minXLeft,minYLeft,maxXLeft,medianY);
+        rightbboxPtr = createBBox(0,minXRight,medianY,maxXRight,maxYRight);
+
         leftNode = createNode(leftbboxPtr);
         rightNode = createNode(rightbboxPtr);
     }
     
-    // now distribute points between two new nodes.
+    // TODO: switch to using the nodes in the Glist which have done this work for you!
+    // now distribute points between two new nodes using the lists.
     for (int pointIndex = 0; pointIndex < node->nPoints; pointIndex ++) {
         Point * currentPoint = node->points[pointIndex];
         if (BBoxContainsPoint(leftNode->bbox,currentPoint)) {
             addPointToNode(leftNode,currentPoint);
-        } else {
+        // TODO: Once we are sure this works, remove these parts.
+        } else if (BBoxContainsPoint(rightNode->bbox,currentPoint)) {
             addPointToNode(rightNode,currentPoint);
+        } else { 
+            fprintf(stderr,"Point does not fit into either bbox");
+            exit(1);
         }
-        
     }
     
     addSplitResultToNode(node,leftNode,rightNode);
 
     free(pointXValues);
     free(pointYValues);
-    
+    g_list_free(leftNodeValues);
+    g_list_free(rightNodeValues);
     return true;
 }
 
@@ -268,4 +325,11 @@ bool nodeWithinDistance(NodePtr node, Point * point, double distanceLimit) {
 
 double distNodeToPoint(NodePtr node, Point * point) {
     return bboxDistanceToPoint(node->bbox,point);
+}
+
+/**
+ * 
+ * */
+double trimNodeBBox(NodePtr node) {
+    return 0.0;
 }
