@@ -8,6 +8,7 @@
 #include <time.h>
 #include <float.h>
 #include <assert.h>
+#include<stdint.h>
 
 int main(int argc, char **argv) {
     clock_t start, end;

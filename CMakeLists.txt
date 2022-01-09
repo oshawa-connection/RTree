@@ -68,6 +68,7 @@ add_executable(
   src/PriorityQueue.c
 )
 
-target_link_libraries(rtree ${LIBS})
-target_link_libraries(all_tests ${LIBS})
+target_link_libraries(rtree ${LIBS} m)
+target_link_libraries(all_tests ${LIBS} m)
+
 message(${Glib_INCLUDE_DIRS})

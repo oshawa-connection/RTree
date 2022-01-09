@@ -2,13 +2,19 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
+// -- 
+// These are included here because SIZE_MAX is defined in different places on
+// linux and mac.
+#include <limits.h>
+#include <stdint.h>
+// --
 #include "./BBox.h"
 #include "./Point.h"
 
 // Needed in header to allow testing
 # define MAX_POINTS_PER_NODE 50
 #if MAX_POINTS_PER_NODE >= SIZE_MAX
-    #error "MAX_POINTS_PER_NODE exceeds SIZE_MAX"
+    #error "MAX_POINTS_PER_NODE exceeds SIZE_MAX of %s", 
 #endif
 typedef struct Node * NodePtr;
 

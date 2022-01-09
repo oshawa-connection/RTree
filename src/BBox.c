@@ -149,7 +149,8 @@ closestFaceResult determineClosestFace(BBox * bbox, Point * point) {
     free(topLeft);
     free(bottomRight);
     free(topRight);
-    closestFaceResult calcResult = {.direction=faceDirectionResult,.bottomLeft=bottomLeftDist,.bottomRight=bottomRightDist,.topLeft=topLeftDist,.topRight=topRightDist,.closestVertexDistance=*shortestDist};
+
+    closestFaceResult calcResult = {.direction=faceDirectionResult,.bottomLeft=bottomLeftDist,.topLeft=topLeftDist,.bottomRight=bottomRightDist,.topRight=topRightDist,.closestVertexDistance=*shortestDist};
     return calcResult;
 }
 
