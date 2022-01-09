@@ -122,7 +122,7 @@ closestFaceResult determineClosestFace(BBox * bbox, Point * point) {
 
     double * distances[] = {&bottomLeftDist,&topLeftDist,&bottomRightDist,&topRightDist};
 
-    qsort(distances, 4, sizeof(double), cmpfuncdpointer);
+    qsort(distances, 4, sizeof(double*), cmpfuncdpointer);
 
     double * shortestDist = distances[0];
     double * secondShortestDist = distances[1];
