@@ -25,7 +25,7 @@ typedef struct RTree {
 RTreePtr createRTree() {
     RTreePtr rtree = (RTreePtr)malloc(sizeof(RTree));
     BBox * bbox = createBBox(0,0.0,0.0,0.0,0.0);
-    
+    rtree->depth = 0;
     rtree->rootNode = createNode(bbox);
     rtree->nodeQueue = g_queue_new();
 
