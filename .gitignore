@@ -13,3 +13,4 @@ Makefile
 rtree
 all_tests
 pq
+output/
