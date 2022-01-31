@@ -61,7 +61,9 @@ void addNodeToQueue(RTreePtr rtree, NodePtr nodeToAdd) {
     // NodePtr myX = (NodePtr)g_queue_pop_head(myQueue);
 }
 
-
+/**
+ * Returns NULL if the queue is empty
+ * */
 NodePtr getNextNodeFromQueue(RTreePtr rTree) {
     NodePtr currentNode = (NodePtr)g_queue_pop_head(rTree->nodeQueue);
     return currentNode;
@@ -180,6 +182,7 @@ Point * RTreeFindNearestNeighbour(RTreePtr rTree, Point * queryPoint) {
     uint64_t length = pqGetLength(&rTree->priorityQueue);
     
     if (length == 0) {
+        // TODO: Base this on the size of the current bbox that contains the point
         // Then try again with a larger distance, up to a maximum number of tries / distance based on rootnode.
     }
     double bestPointDistance = DBL_MAX;
@@ -189,6 +192,7 @@ Point * RTreeFindNearestNeighbour(RTreePtr rTree, Point * queryPoint) {
         pqPop(&rTree->priorityQueue);
         Point * currentPoint = NULL;
         size_t pointIndex = 0;
+        // TODO: Handle potentially DBL_MAX situation? Maybe return null instead
         double nextNearestBBox = pqPeekPriority(&rTree->priorityQueue);
 
         while((currentPoint = getPointAt(currentNode,pointIndex)) != NULL) {
@@ -244,3 +248,25 @@ bool RTreecontainsPoint(RTreePtr rTree, Point * point) {
     return false;
 }
 
+void serialiseRTree(RTreePtr rTree,FILE * outputfile) {
+    assert(g_queue_is_empty(rTree->nodeQueue) == true);
+
+    addNodeToQueue(rTree, rTree->rootNode);
+    
+    while(!g_queue_is_empty(rTree->nodeQueue)) {
+        NodePtr currentNode = getNextNodeFromQueue(rTree);
+        serialiseBBox(outputfile,getNodeBBox(currentNode));
+        size_t pointCount = 0;
+        int bboxId = getNodeBBoxID(currentNode);
+        Point * currentPoint = NULL;
+        while((currentPoint = getPointAt(currentNode,pointCount++))) {
+            serialisePoint(currentPoint,bboxId,outputfile);
+        }
+        
+        size_t nodeCount = 0;
+        NodePtr currentChild = NULL;
+        while((currentChild = getChildNodeAt(currentNode,nodeCount++))) {
+            addNodeToQueue(rTree,currentChild);
+        }
+    }
+}

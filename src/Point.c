@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 Point * createPoint(float x, float y) {
     Point * point = (Point *) malloc(sizeof(Point *));
@@ -30,7 +31,15 @@ double distanceBetweenPoints(Point * point, Point * otherPoint) {
 }
 
 bool pointsAreEqual(Point * point, Point * otherPoint) {
-    double xDiff = fabsf(point->x - otherPoint->x);
-    double yDiff = fabsf(point->x - otherPoint->x);
+    double xDiff = fabs(point->x - otherPoint->x);
+    double yDiff = fabs(point->x - otherPoint->x);
     return xDiff < __FLT_EPSILON__ && yDiff < __FLT_EPSILON__;
+}
+
+
+/**
+ * TODO: Change bboxID type to be int64
+ * */
+void serialisePoint(Point * point, int bboxID,  FILE * outputfile) {
+    fprintf(outputfile,"[POINT]\nbboxid=%d\nx=%f\ny=%f\n",bboxID,point->x,point->y);
 }

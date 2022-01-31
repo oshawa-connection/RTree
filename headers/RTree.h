@@ -28,3 +28,5 @@ Point * RTreeFindNearestNeighbour(RTreePtr rTree, Point * queryPoint);
 
 
 bool RTreecontainsPoint(RTreePtr rTree, Point * point);
+
+void serialiseRTree(RTreePtr rTree, FILE * outputfile);

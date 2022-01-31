@@ -2,12 +2,13 @@
 #include "Point.h"
 #include "Polygon.h"
 #include <stdbool.h>
+#include <stdio.h>
 typedef struct BBox{
     int id;
-    float minX;
-    float minY;
-    float maxX;
-    float maxY;
+    double minX;
+    double minY;
+    double maxX;
+    double maxY;
 } BBox;
 
 typedef enum {TOP,BOTTOM,LEFT,RIGHT,ERROR} faceDirection;
@@ -15,7 +16,7 @@ typedef enum {TOP,BOTTOM,LEFT,RIGHT,ERROR} faceDirection;
 // /**
 //  * 
 //  * */
-BBox * createBBox(int id,float minX, float minY, float maxX, float maxY);
+BBox * createBBox(int id,double minX, double minY, double maxX, double maxY);
 
 void deleteBBox(BBox * bbxptr);
 
@@ -37,3 +38,5 @@ bool BBoxContainsPoint(BBox * bbox, Point * point);
 bool BBoxIntersectsPolygon(BBox * bbox, Polygon * polygon);
 
 double bboxDistanceToPoint(BBox * bbox, Point * point);
+
+void serialiseBBox(FILE * file,BBox * bboxptr);

@@ -3,13 +3,19 @@
 #include <stdio.h>
 #include <assert.h>
 
-BBox * createBBox(int id,float minX, float minY, float maxX, float maxY) {
+BBox * createBBox(int id,double minX, double minY, double maxX, double maxY) {
     BBox * myBBox = (BBox *)malloc(sizeof(BBox));
+    myBBox->id = rand();
     myBBox->minX = minX;
     myBBox->minY = minY;
     myBBox->maxX = maxX;
     myBBox->maxY = maxY;
     return myBBox;
+}
+
+void serialiseBBox(FILE * file,BBox * bboxptr) {
+    fprintf(file,"[BBOX]\nid=%d\nminx=%f\nminy=%f\nmaxx=%f\nmaxy=%f\n",bboxptr->id,bboxptr->minX,bboxptr->minY,bboxptr->maxX,bboxptr->maxY);
+
 }
 
 void deleteBBox(BBox * bbxptr) {
@@ -108,7 +114,12 @@ typedef struct closestFaceResult {
 int cmpfuncdpointer (const void * a, const void * b) {
    return ( **(double**)a - **(double**)b );
 }
-
+/**
+ * This function has a bug. If the BBox is really long, then points could be determined to be closest to 
+ * the ERROR face - because if it is closest the the topLeft, and the topRight is really far away, then the 
+ * bottomLeft could be closer even though the point is above the bbox.
+ * 
+ * */
 closestFaceResult determineClosestFace(BBox * bbox, Point * point) {
     Point * bottomLeft = createPoint(bbox->minX,bbox->minY);
     Point * topLeft = createPoint(bbox->minX,bbox->maxY);
@@ -143,6 +154,12 @@ closestFaceResult determineClosestFace(BBox * bbox, Point * point) {
         faceDirectionResult= RIGHT;
     }
     
+
+    if (faceDirectionResult == ERROR) {
+        fprintf(stderr,"ERROR while determining face direction.\n");
+        fprintf(stderr,"Point x: %f, y: %f\n",point->x,point->y);
+        fprintf(stderr,"BBOX: minx: %f, miny: %f, maxx: %f, maxy: %f\n",bbox->minX,bbox->minY,bbox->maxX,bbox->maxY);
+    }
     assert(faceDirectionResult != ERROR);
 
     free(bottomLeft);

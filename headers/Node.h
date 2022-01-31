@@ -59,3 +59,5 @@ bool nodeContainsPoint(NodePtr node, Point * point);
 bool nodeWithinDistance(NodePtr node, Point * point, double distanceLimit);
 
 double distNodeToPoint(NodePtr node, Point * point);
+
+int getNodeBBoxID(NodePtr node);

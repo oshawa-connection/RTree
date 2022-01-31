@@ -7,6 +7,8 @@
 #include "../src/BBox.c"
 #include "../src/Point.c"
 
+
+
 TEST(NodeTests, CanCreateAndDestroy) {
     BBox bbox = {1,1.0,1.0f,1.0,1.0};
     NodePtr someNode = createNode(&bbox);
@@ -62,6 +64,7 @@ TEST(NodeTests, TellsWhenToSplitNode) {
     EXPECT_FALSE(result);
     free(someNode);
 }
+
 
 TEST(NodeTests,SplitsCorrectly) {
     // TODO: Once we set up bbox enlargen, this will not work. We also need to allow node to free the bbox.
@@ -119,4 +122,11 @@ TEST(NodeTests,CanGetPointAt) {
     Point * resulttwo = getPointAt(node,1);
     EXPECT_NE(result,(Point *)NULL);
     EXPECT_EQ(resulttwo, (Point * ) NULL);
+}
+
+TEST(NodeTests,NodeContainsPoint) {
+    Point * myPoint = createPoint(1.79,1.9137);
+    BBox * bbox = createBBox(0,1.14559632,2.19,2.03,1.91);
+    bool result = BBoxContainsPoint(bbox,myPoint);
+    EXPECT_TRUE(result);
 }

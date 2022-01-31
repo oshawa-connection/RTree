@@ -56,6 +56,9 @@ NodePtr getChildNodeAt(NodePtr node, size_t childNodeIndex) {
     return node->nextNodes[childNodeIndex];
 }
 
+/**
+ * Returns null if the point index exceeds the number of points.
+ * */
 Point * getPointAt(NodePtr node, size_t pointIndex) {
     if (node->points == NULL) {
         return NULL;
@@ -332,4 +335,8 @@ double distNodeToPoint(NodePtr node, Point * point) {
  * */
 double trimNodeBBox(NodePtr node) {
     return 0.0;
+}
+
+int getNodeBBoxID(NodePtr node) {
+    return node->bbox->id;
 }
