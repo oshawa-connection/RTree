@@ -172,6 +172,54 @@ closestFaceResult determineClosestFace(BBox * bbox, Point * point) {
 }
 
 
+double determineClosestFaceSecond(BBox * bbox, Point * point) {
+    faceDirection faceDirectionResult = ERROR;
+
+    // TOP
+    if (point->y > bbox->maxY && point->x < bbox->maxX && point->x > bbox->minX) {
+        faceDirectionResult = TOP;
+        Point bboxPoint = {point->x,bbox->maxY};
+        return distanceBetweenPoints(point,&bboxPoint);
+    }
+
+    // BOTTOM
+    if (point->y < bbox->maxY && point->x < bbox->maxX && point->x > bbox->minX) {
+        faceDirectionResult = BOTTOM;
+        Point bboxPoint = {point->x,bbox->minY};
+        return distanceBetweenPoints(point,&bboxPoint);
+    }
+
+    //LEFT
+    if (point->x < bbox->minX && point->y < bbox->maxY && point->y > bbox->minY) {
+        faceDirectionResult = LEFT;
+        Point bboxPoint = {bbox->minX,point->y};
+        return distanceBetweenPoints(point,&bboxPoint);
+    }
+
+    // RIGHT
+    if (point->x > bbox->maxX && point->y < bbox->maxY && point->y > bbox->minY) {
+        faceDirectionResult = RIGHT;
+        Point bboxPoint = {bbox->maxX,point->y};
+        return distanceBetweenPoints(point,&bboxPoint);
+    }
+
+    Point bottomLeft = {bbox->minX,bbox->minY};
+    Point bottomRight = {bbox->maxX,bbox->minY};
+    Point topLeft = {bbox->minX,bbox->maxY};
+    Point topRight = {bbox->maxX,bbox->maxY};
+
+    double bottomLeftDist = distanceBetweenPoints(point,&bottomLeft);
+    double bottomRightDist = distanceBetweenPoints(point,&bottomRight);
+    double topLeftDist = distanceBetweenPoints(point,&topLeft);
+    double topRightDist = distanceBetweenPoints(point,&topRight);
+
+    double * distances[] = {&bottomLeftDist,&bottomRightDist,&topLeftDist,&topRightDist};
+
+    qsort(distances, 4, sizeof(double*), cmpfuncdpointer);
+    return *distances[0];
+    
+}
+
 bool pointWithinXBounds(BBox * bbox, Point * point) {
     if (point->x < bbox->minX) return false;
     if (point->x > bbox->maxX) return false;
@@ -189,43 +237,13 @@ double bboxDistanceToPoint(BBox * bbox, Point * point) {
     if (BBoxContainsPoint(bbox,point) == true) {
         return 0.0;
     }
-    closestFaceResult result = determineClosestFace(bbox,point);
-    double distanceResult;
-    switch (result.direction)
-    {
-        case TOP:
-            if (pointWithinXBounds(bbox,point)) {
-                distanceResult = point->y - bbox->maxY;
-            } else {
-            distanceResult = result.closestVertexDistance;
-            }
-            break;
-        case BOTTOM:
-            if (pointWithinXBounds(bbox,point)) {
-                distanceResult = bbox->minY - point->y;
-            } else {
-            distanceResult = result.closestVertexDistance;
-            }
-            break;
-        case RIGHT:
-            if (pointWithinYBounds(bbox,point)) {
-                distanceResult = point->x - bbox->maxX;
-            } else {
-            distanceResult = result.closestVertexDistance;
-            }
-            break;
-        case LEFT:
-            if (pointWithinYBounds(bbox,point)) {
-                distanceResult = bbox->minX - point->x;
-            } else {
-            distanceResult = result.closestVertexDistance;
-            }
-            break;
-        default:
-            fprintf(stderr,"Invalid face direction result");
-            exit(1);
-            break;
-    }
+
+    //TODO: This is a very inefficient way of doing this.
+    // We should probably use a KD-Tree to do this.
+    // But for now this is fine.
+    // We should also probably use a KD-Tree to do this.
+    // But for now this is fine.
     
-    return distanceResult;
+
+    return determineClosestFaceSecond(bbox,point);
 }

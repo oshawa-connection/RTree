@@ -12,7 +12,7 @@
 #include "./Point.h"
 
 // Needed in header to allow testing
-# define MAX_POINTS_PER_NODE 50
+# define MAX_POINTS_PER_NODE 5
 #if MAX_POINTS_PER_NODE >= SIZE_MAX
     #error "MAX_POINTS_PER_NODE exceeds SIZE_MAX of %s", 
 #endif

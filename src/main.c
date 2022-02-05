@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
     srand(time(NULL));
     clock_t start, end;
     double cpu_time_used;
-    const size_t NUMBER_OF_POINTS = 1000;
+    const size_t NUMBER_OF_POINTS = 10000;
     Point ** points = (Point **)malloc(sizeof(Point **) * NUMBER_OF_POINTS);
     RTreePtr rtree = createRTree();
     for(uint64_t i = 0;i < NUMBER_OF_POINTS; i++) {
@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
     fclose(outputfile);
     start = clock();
     for(uint64_t i = 0;i < NUMBER_OF_POINTS; i++) {
-        printf("Finding point number %llu at: %f, %f\n",i,points[i]->x,points[i]->y);
+        // printf("Finding point number %llu at: %f, %f\n",i,points[i]->x,points[i]->y);
         RTreeFindNearestNeighbour(rtree,points[i]);
     }
 
