@@ -41,5 +41,5 @@ bool pointsAreEqual(Point * point, Point * otherPoint) {
  * TODO: Change bboxID type to be int64
  * */
 void serialisePoint(Point * point, int bboxID,  FILE * outputfile) {
-    fprintf(outputfile,"[POINT]\nbboxid=%d\nx=%f\ny=%f\n",bboxID,point->x,point->y);
+    fprintf(outputfile,"[POINT]\n%d\n%f\n%f\n",bboxID,point->x,point->y);
 }

@@ -3,9 +3,14 @@
 #include <stdio.h>
 #include <assert.h>
 
+static int bboxID = 0;
+
 BBox * createBBox(int id,double minX, double minY, double maxX, double maxY) {
     BBox * myBBox = (BBox *)malloc(sizeof(BBox));
-    myBBox->id = rand();
+    
+    myBBox->id = bboxID;
+
+    bboxID += 1;
     myBBox->minX = minX;
     myBBox->minY = minY;
     myBBox->maxX = maxX;
@@ -14,7 +19,7 @@ BBox * createBBox(int id,double minX, double minY, double maxX, double maxY) {
 }
 
 void serialiseBBox(FILE * file,BBox * bboxptr) {
-    fprintf(file,"[BBOX]\nid=%d\nminx=%f\nminy=%f\nmaxx=%f\nmaxy=%f\n",bboxptr->id,bboxptr->minX,bboxptr->minY,bboxptr->maxX,bboxptr->maxY);
+    fprintf(file,"[BBOX]\n%d\n%f\n%f\n%f\n%f\n",bboxptr->id,bboxptr->minX,bboxptr->minY,bboxptr->maxX,bboxptr->maxY);
 
 }
 

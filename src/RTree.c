@@ -182,6 +182,8 @@ Point * RTreeFindNearestNeighbour(RTreePtr rTree, Point * queryPoint) {
     uint64_t length = pqGetLength(&rTree->priorityQueue);
     
     if (length == 0) {
+        printf("NOT IMPLEMENETED YET\n");
+        exit(1);
         // TODO: Base this on the size of the current bbox that contains the point
         // Then try again with a larger distance, up to a maximum number of tries / distance based on rootnode.
     }

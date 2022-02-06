@@ -21,12 +21,12 @@ int main(int argc, char **argv) {
     srand(time(NULL));
     clock_t start, end;
     double cpu_time_used;
-    const size_t NUMBER_OF_POINTS = 10000;
+    const size_t NUMBER_OF_POINTS = 10;
     Point ** points = (Point **)malloc(sizeof(Point **) * NUMBER_OF_POINTS);
     RTreePtr rtree = createRTree();
     for(uint64_t i = 0;i < NUMBER_OF_POINTS; i++) {
         points[i] = createPoint(randomf(),randomf());
-        printf("Inserting point number %llu at: %f, %f\n",i,points[i]->x,points[i]->y);
+        // printf("Inserting point number %llu at: %f, %f\n",i,points[i]->x,points[i]->y);
         RTreeInsertPoint(rtree,points[i]);
     }
 
