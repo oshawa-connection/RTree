@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
     srand(time(NULL));
     clock_t start, end;
     double cpu_time_used;
-    const size_t NUMBER_OF_POINTS = 10;
+    const size_t NUMBER_OF_POINTS = 50;
     Point ** points = (Point **)malloc(sizeof(Point **) * NUMBER_OF_POINTS);
     RTreePtr rtree = createRTree();
     for(uint64_t i = 0;i < NUMBER_OF_POINTS; i++) {

@@ -16,7 +16,7 @@
             "MIMode": "lldb",
         },
         {
-            "name": "(lldb) Launch",
+            "name": "Debug tests",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/all_tests",

@@ -236,15 +236,17 @@ bool splitNode(NodePtr node) {
         }
         
         double minXLeft = calculateMinimumd(leftNodeValues,false);
+        double maxXLeft = calculateMaximumd(leftNodeValues,false);
         double minYLeft = calculateMinimumd(leftNodeValues,true);
         double maxYLeft = calculateMaximumd(leftNodeValues,true);
 
+        double minXRight = calculateMinimumd(rightNodeValues,false);
         double maxXRight = calculateMaximumd(rightNodeValues,false); 
-        double minYRight = calculateMinimumd(rightNodeValues,true);
+        double minYRight = calculateMinimumd(rightNodeValues,true); 
         double maxYRight = calculateMaximumd(rightNodeValues,true); 
 
-        leftbboxPtr = createBBox(0,minXLeft,minYLeft,medianX,maxYLeft);
-        rightbboxPtr = createBBox(0,medianX,minYRight,maxXRight,maxYRight);
+        leftbboxPtr = createBBox(0,minXLeft,minYLeft,maxXLeft,maxYLeft);
+        rightbboxPtr = createBBox(0,minXRight,minYRight,maxXRight,maxYRight);
 
         leftNode = createNode(leftbboxPtr);
         rightNode = createNode(rightbboxPtr);
@@ -261,15 +263,17 @@ bool splitNode(NodePtr node) {
         }
 
         double minXLeft = calculateMinimumd(leftNodeValues,false);
-        double minYLeft = calculateMinimumd(leftNodeValues,true);
         double maxXLeft = calculateMaximumd(leftNodeValues,false);
+        double minYLeft = calculateMinimumd(leftNodeValues,true);
+        double maxYLeft = calculateMaximumd(leftNodeValues,true);
 
         double minXRight = calculateMinimumd(rightNodeValues,false);
         double maxXRight = calculateMaximumd(rightNodeValues,false); 
+        double minYRight = calculateMinimumd(rightNodeValues,true); 
         double maxYRight = calculateMaximumd(rightNodeValues,true); 
 
-        leftbboxPtr = createBBox(0,minXLeft,minYLeft,maxXLeft,medianY);
-        rightbboxPtr = createBBox(0,minXRight,medianY,maxXRight,maxYRight);
+        leftbboxPtr = createBBox(0,minXLeft,minYLeft,maxXLeft,maxYLeft);
+        rightbboxPtr = createBBox(0,minXRight,minYRight,maxXRight,maxYRight);
 
         leftNode = createNode(leftbboxPtr);
         rightNode = createNode(rightbboxPtr);

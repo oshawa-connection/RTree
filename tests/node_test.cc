@@ -75,7 +75,7 @@ TEST(NodeTests,SplitsCorrectly) {
     bool result = true;
     //Varience is in Y, so we expect the split to be along the Y axis in order
     //to split that in half
-    for(int i =0; i < MAX_POINTS_PER_NODE +5;i ++) {
+    for(int i =0; i < 5;i ++) {
         // memory leak
         Point * point = createPoint((float)i,(float)i);
         // We overload the node so that it is ready to split.
@@ -102,15 +102,18 @@ TEST(NodeTests,SplitsCorrectly) {
     // x ------ x Mx, my
     //mx,my
     // TODO: Once we set up bbox enlargen, this will not work. We also need to allow node to free the bbox.
-    EXPECT_FLOAT_EQ(leftNode->bbox->minX,bbox->minX);
-    EXPECT_FLOAT_EQ(leftNode->bbox->maxX,bbox->maxX);
-    
-    //Expect that the left and right bbox will have the same maxX (left) and minX (right)
-    EXPECT_FLOAT_EQ(leftNode->bbox->maxY,rightNode->bbox->minY);
-    // Expec that the number of points in each node is roughly equal.
-    EXPECT_NEAR(leftNode->nPoints,rightNode->nPoints,2);
-    // The sum of both should be the original number of points.
-    EXPECT_EQ(leftNode->nPoints + rightNode->nPoints,MAX_POINTS_PER_NODE);
+    EXPECT_EQ(leftNode->nPoints,3);
+    EXPECT_FLOAT_EQ(leftNode->bbox->minX,0);
+    EXPECT_FLOAT_EQ(leftNode->bbox->maxX,2.0);
+    EXPECT_FLOAT_EQ(leftNode->bbox->minY,0);
+    EXPECT_FLOAT_EQ(leftNode->bbox->maxY,2);
+
+
+    EXPECT_EQ(rightNode->nPoints,2);
+    EXPECT_FLOAT_EQ(rightNode->bbox->minX,3.0);
+    EXPECT_FLOAT_EQ(rightNode->bbox->maxX,4.0);
+    EXPECT_FLOAT_EQ(rightNode->bbox->minY,3.0);
+    EXPECT_FLOAT_EQ(rightNode->bbox->maxY,4.0);
 }
 
 TEST(NodeTests,CanGetPointAt) {
