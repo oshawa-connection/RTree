@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
     clock_t start, end;
     double cpu_time_used_rtree;
     double cpu_time_used_naive;
-    const size_t NUMBER_OF_POINTS = 5000;
+    const size_t NUMBER_OF_POINTS = 100;
     Point ** points = (Point **)malloc(sizeof(Point **) * NUMBER_OF_POINTS);
     RTreePtr rtree = createRTree();
     for(uint64_t i = 0;i < NUMBER_OF_POINTS; i++) {
