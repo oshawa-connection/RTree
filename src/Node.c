@@ -143,7 +143,7 @@ double calculateMaximumd(GList * pointList, bool y) {
 }
 
 double calculateMeand(double * dvalues, size_t numberOfValues) {
-    double sum;
+    double sum = 0.0;
     for(int i=0;i<numberOfValues;i++) {
         sum += dvalues[i];
     }
@@ -151,7 +151,7 @@ double calculateMeand(double * dvalues, size_t numberOfValues) {
 }
 
 double calculateVarienced(double * dvalues, size_t numberOfValues) {
-    double sum;
+    double sum = 0.0;
     double mean = calculateMeand(dvalues,numberOfValues);
     for(int i=0;i<numberOfValues;i++) {
         sum += powl(dvalues[i] - mean,2);
@@ -224,8 +224,8 @@ bool splitNode(NodePtr node) {
     BBox * rightbboxPtr;
     // TODO: Perhaps this section could be moved to the bbox.c itself?
     if (result == X_DIRECTION) {
-        double medianX = caculateMediand(pointXValues, node->nPoints);
-
+        double medianX = calculateMeand(pointXValues, node->nPoints);
+        
         for (int pointIndex = 0; pointIndex < node->nPoints; pointIndex ++) {
             Point * currentPoint = node->points[pointIndex];
             if (currentPoint->x <= medianX) {
@@ -251,7 +251,7 @@ bool splitNode(NodePtr node) {
         leftNode = createNode(leftbboxPtr);
         rightNode = createNode(rightbboxPtr);
     } else {
-        double medianY = caculateMediand(pointYValues, node->nPoints);
+        double medianY = calculateMeand(pointYValues, node->nPoints);
 
         for (int pointIndex = 0; pointIndex < node->nPoints; pointIndex ++) {
             Point * currentPoint = node->points[pointIndex];

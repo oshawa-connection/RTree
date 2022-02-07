@@ -29,6 +29,7 @@
         "stdbool.h": "c",
         "stdlib.h": "c",
         "limits.h": "c",
-        "cstdint": "cpp"
+        "cstdint": "cpp",
+        "time.h": "c"
     }
 }

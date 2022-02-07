@@ -116,6 +116,81 @@ TEST(NodeTests,SplitsCorrectly) {
     EXPECT_FLOAT_EQ(rightNode->bbox->maxY,4.0);
 }
 
+
+TEST(NodeTests,SplitsCorrectly2) {
+    // TODO: Once we set up bbox enlargen, this will not work. We also need to allow node to free the bbox.
+    BBox * bbox = createBBox(1,1.0,1.0,1.0,1.0);
+    NodePtr someNode = createNode(bbox);
+
+    Point * point1 = createPoint(1000,1000);
+    Point * point2 = createPoint(1001,1001);
+    Point * point3 = createPoint(1002,1002);
+    Point * point4 = createPoint(2000,2000);
+    Point * point5 = createPoint(2001,2001);
+    Point * point6 = createPoint(2002,2002);
+
+
+    addPointToNode(someNode,point1);
+    addPointToNode(someNode,point2);
+    addPointToNode(someNode,point3);
+    addPointToNode(someNode,point4);
+    addPointToNode(someNode,point5);
+    addPointToNode(someNode,point6);
+    
+
+
+    bool splitResult = splitNode(someNode);
+    //True if success, false if there was an error.
+    EXPECT_TRUE(splitResult);
+    //We expect the split node (which is now a parent, not a leaf)
+    // to have 0 points itself.
+    EXPECT_EQ(someNode->nPoints,0);
+    // we expect the split node to now have 2 children.
+    EXPECT_EQ(someNode->nNodes,2);
+    EXPECT_NE(someNode->nextNodes, (Node **) NULL);
+    
+    Node * leftNode = someNode->nextNodes[0];
+    Node * rightNode = someNode->nextNodes[1];
+    
+    //mx,My     Mx,My
+    // x ------ x
+    // |        |
+    // |        |
+    // x ------ x Mx, my
+    //mx,my
+    // TODO: Once we set up bbox enlargen, this will not work. We also need to allow node to free the bbox.
+    EXPECT_EQ(leftNode->nPoints,3);
+    EXPECT_FLOAT_EQ(leftNode->bbox->minX,1000);
+    EXPECT_FLOAT_EQ(leftNode->bbox->maxX,1002);
+    EXPECT_FLOAT_EQ(leftNode->bbox->minY,1000);
+    EXPECT_FLOAT_EQ(leftNode->bbox->maxY,1002);
+
+
+    EXPECT_EQ(rightNode->nPoints,3);
+    EXPECT_FLOAT_EQ(rightNode->bbox->minX,2000);
+    EXPECT_FLOAT_EQ(rightNode->bbox->maxX,2002);
+    EXPECT_FLOAT_EQ(rightNode->bbox->minY,2000);
+    EXPECT_FLOAT_EQ(rightNode->bbox->maxY,2002);
+
+    leftNode->bbox->id = 1;
+    rightNode->bbox->id = 2;
+
+    FILE * outputfile = fopen("output/rtree.txt","w");
+
+    serialiseBBox(outputfile,rightNode->bbox);
+    serialiseBBox(outputfile,leftNode->bbox);
+    serialisePoint(point1,1,outputfile);
+    serialisePoint(point2,1,outputfile);
+    serialisePoint(point3,1,outputfile);
+    serialisePoint(point4,2,outputfile);
+    serialisePoint(point5,2,outputfile);
+    serialisePoint(point6,2,outputfile);
+    fclose(outputfile);
+
+}
+
+
+
 TEST(NodeTests,CanGetPointAt) {
     BBox * bbox = createBBox(0,0,1,0,1);
     NodePtr node = createNode(bbox);

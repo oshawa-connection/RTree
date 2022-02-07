@@ -11,8 +11,9 @@
 #include "./BBox.h"
 #include "./Point.h"
 
+//TODO: Allow setting at runtime instead.
 // Needed in header to allow testing
-# define MAX_POINTS_PER_NODE 5
+# define MAX_POINTS_PER_NODE 7
 #if MAX_POINTS_PER_NODE >= SIZE_MAX
     #error "MAX_POINTS_PER_NODE exceeds SIZE_MAX of %s", 
 #endif

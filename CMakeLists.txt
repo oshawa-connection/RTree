@@ -11,7 +11,7 @@ PROJECT (RTree)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 # GoogleTest requires at least C++11
 SET(CMAKE_CXX_STANDARD 11)
-
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -O2")
 
 
 INCLUDE(FetchContent)

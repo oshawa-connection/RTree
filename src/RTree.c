@@ -10,9 +10,10 @@
 #include <assert.h>
 #include <stdint.h>
 #include "../headers/PriorityQueue.h"
+#include <assert.h>
 
 // Used to prevent infinite recursion
-#define RTREE_MAX_DEPTH 10000
+#define RTREE_MAX_DEPTH 1000000
 
 typedef struct RTree {
     int depth;
@@ -89,9 +90,11 @@ NodePtr _rTreeTraverseToLeafEnlargen(RTreePtr rTree, Point * point) {
             if (currentMin > enlargementArea) {
                 currentMin = enlargementArea;
                 smallestEnlargementNode = currentChild;
-                addNodeToQueue(rTree,currentChild);
+                
             }
         }
+
+        addNodeToQueue(rTree,smallestEnlargementNode);
         currentNode = smallestEnlargementNode;  
     }
     
@@ -105,6 +108,7 @@ void _enlargenAllNodes(RTreePtr rTree, Point * newPoint) {
         BBox * bbox = getNodeBBox(currentNode);
         BboxEnlargen(bbox,newPoint);
     }
+    
     assert(g_queue_get_length(rTree->nodeQueue) == 0);
 }
 
@@ -168,7 +172,7 @@ Point * RTreeFindNearestNeighbour(RTreePtr rTree, Point * queryPoint) {
     assert(pqGetLength(&rTree->priorityQueue) == 0);
     NodePtr rootNode = rTree->rootNode;
     if (!RTreecontainsPoint(rTree,queryPoint)) {
-        fprintf(stdout, "Query point does not exist in RTree");
+        // fprintf(stdout, "Query point does not exist in RTree");
         return NULL;
     }
 
@@ -176,11 +180,13 @@ Point * RTreeFindNearestNeighbour(RTreePtr rTree, Point * queryPoint) {
     // pqPush(&rTree->priorityQueue,rTree->rootNode,0.0);
     /** 
      * TODO: this initial search distance could be calculated to a reasonable 
-     * initial guess based on the dimensions of the root node?
+     * initial guess based on the dimensions of the node the point is actually in
      * */
-    findLeavesWithinDistance(rTree,queryPoint,5.0); //TODO: then add them to priority queue.
+    findLeavesWithinDistance(rTree,queryPoint,0.001); //TODO: then add them to priority queue.
     uint64_t length = pqGetLength(&rTree->priorityQueue);
     
+    // printf("Length was: %d\n",length);
+
     if (length == 0) {
         printf("NOT IMPLEMENETED YET\n");
         exit(1);

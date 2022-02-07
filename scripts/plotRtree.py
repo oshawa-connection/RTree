@@ -1,5 +1,4 @@
 from random import uniform
-from turtle import color
 from typing import List
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -15,9 +14,19 @@ fig, ax = plt.subplots()
 bboxColourDict = {}
 
 class BBox:
-    def __init__(self,id,rect):
+    def __init__(self,id,rect,minX,minY,maxX,maxY):
         self.id = id
         self.rect = rect
+        self.minX = minX
+        self.minY = minY
+        self.maxX =maxX
+        self.maxY = maxY
+
+    def centreX(self):
+        return (self.maxX + self.minX) / 2.0
+
+    def centreY(self):
+        return (self.maxY + self.minY) / 2.0
 
 
 class Point:
@@ -50,7 +59,7 @@ with open("../output/rtree.txt","r") as f:
             maxY = float(f.readline())
             bboxColour = (uniform(0, 1), uniform(0, 1), uniform(0, 1))
             bboxColourDict[idLine] = bboxColour
-            bboxes.append(BBox(idLine,patches.Rectangle((minX, minY), maxX - minX, maxY - minY, linewidth=1, edgecolor=bboxColour, facecolor='none')))
+            bboxes.append(BBox(idLine,patches.Rectangle((minX, minY), maxX - minX, maxY - minY, linewidth=1, edgecolor=bboxColour, facecolor='none'),minX, minY,maxX,maxY))
             
         if result == "": # assume no blank lines
             break
@@ -65,6 +74,8 @@ bboxIds = set(bboxIds)
 for bbox in bboxes:
     if (bbox.id in bboxIds):
         ax.add_patch(bbox.rect)  
+        print(f"{bbox.centreX()}, {bbox.centreY()}")
+        ax.text(bbox.centreX(),bbox.centreY(),bbox.id,fontsize=12)
 
 for point in points:
     plt.scatter(point.x,point.y,color=point.getColour())
